@@ -20,7 +20,7 @@ Bu repo ders slaytlarını ve duyuruları içerir. Yeni hafta eklendiğinde habe
 | Final Sınavı | %60 |
 
 - **Ara sınav:** Üniversitelerin vize haftasında, ders saati dışında yapılır; dönemin ilk yarısının konuları.
-- **Dönem projesi:** Takımlar halinde, yaması yayımlanmış gerçek bir zafiyetin (CVE ya da bilinen bir olay) kök nedeni, sömürü yolu ve yama eleştirisi; rapor ve sunum. Sunum sonrası soru-cevap bireysel notlandırılır.
+- **Dönem projesi:** Bireysel. Yaması yayımlanmış gerçek bir zafiyetin (CVE ya da bilinen bir olay) kök nedeni, sömürü yolu ve yama eleştirisi; teknik rapor ve en fazla 5 dakikalık anlatım videosu. Ders saatinde sunum yapılmaz.
 - **Final:** Dönem sonu; kod okuma, zafiyet tespiti, düzeltme yazma ve gerekçelendirme ağırlıklı.
 
 Sınav tarihleri üniversitelerin akademik takvimine göre duyurulur.
@@ -40,8 +40,8 @@ Sınav tarihleri üniversitelerin akademik takvimine göre duyurulur.
 | 9 | Statik ve dinamik analiz (SAST/DAST), triyaj | — |
 | 10 | Yapay zekâ destekli geliştirmenin güvenliği | — |
 | 11 | LLM uygulamalarının güvenliği | — |
-| 12 | Proje sunumları (I) | — |
-| 13 | Proje sunumları (II) | — |
+| 12 | Tampon: geriden gelen konular ve uygulama | — |
+| 13 | Tampon: uygulama ve bütünleşik tekrar | — |
 | 14 | Genel tekrar | — |
 | 15 | Final sınavı | — |
 
