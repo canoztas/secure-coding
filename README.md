@@ -30,7 +30,7 @@ Sınav tarihleri üniversitelerin akademik takvimine göre duyurulur.
 | Hafta | Konu | Slayt |
 |:---:|---|:---:|
 | 1 | Giriş, güvenli tasarım ilkeleri ve tehdit modelleme | [PDF](slaytlar/hafta01.pdf) |
-| 2 | Enjeksiyon ve güvenilmeyen girdinin işlenmesi | — |
+| 2 | Enjeksiyon ve güvenilmeyen girdinin işlenmesi | [PDF](slaytlar/hafta02.pdf) |
 | 3 | Tarayıcı güvenlik modeli, XSS ve CSRF | — |
 | 4 | Uygulamalı kriptografi | — |
 | 5 | Kimlik doğrulama, parolalar ve oturum yönetimi | — |
