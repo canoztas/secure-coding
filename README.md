@@ -16,12 +16,6 @@ Bu repo ders sunumlarını, uygulama örneklerini ve dönem projesi yönergesini
 | 3 | HTTP ve durum kodları; cookie, session, XSS ve savunmaları | [HTML](slaytlar/hafta03.html) · [PDF](slaytlar/hafta03.pdf) |
 | 4 | Neden şifreleriz? Tarihçe, simetrik/asimetrik, Diffie–Hellman, TLS, RNG/nonce, brute force hızları (2026), rainbow table ve salt | [HTML](slaytlar/hafta04.html) · [PDF](slaytlar/hafta04.pdf) |
 
-HTML dosyasını indirip tarayıcıda açabilirsiniz. Sağ/sol ok veya boşlukla slayt değiştirin; **F** ile tam ekran açın. Görseller dosyaya gömülüdür; özel yazı tipleri internet üzerinden yüklenir.
-
-Hafta 4'ün GIF'leri ve yazı tipleri dosyaya gömülüdür; sunum çevrimdışı açılabilir. GIF'ler HTML'de hareketli, PDF'de sabit kare olarak görünür. Örnek kişiler Alice ve Bob'dur.
-
-Kriptografi kullanım haritası: [PNG](slaytlar/hafta04-kripto-haritasi.png) · [SVG](slaytlar/hafta04-kripto-haritasi.svg). Sunumun 7. slaydında da bulunur.
-
 ## Lablar
 
 | Hafta | İçerik | Kurulum ve kullanım |
