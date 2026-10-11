@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Secure Coding · Week 02 Lab</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/theme.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to experiment</a>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Secure coding lab home">
+      <span class="brand-icon" aria-hidden="true">&lt;/&gt;</span>
+      <span><strong>Secure coding</strong><span class="brand-caption">INTERACTIVE LAB</span></span>
+    </a>
+    <div class="topbar-meta"><span class="week-tag">WEEK 02</span><span class="connection" id="connection"><i aria-hidden="true"></i><span>Connecting</span></span></div>
+  </header>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Lab experiments">
+      <div class="sidebar-heading"><span>EXPERIMENTS</span><span id="scenario-count">07</span></div>
+      <nav id="scenario-nav" aria-label="Choose an experiment"><p class="nav-loading">Loading experiments…</p></nav>
+      <div class="sidebar-note"><span class="note-symbol" aria-hidden="true">↗</span><strong>From input to result</strong><p>Follow an input. See what the server executes. Compare the same request with the fixed version.</p></div>
+      <div class="sidebar-footer">Input → interpreter → behavior</div>
+    </aside>
+    <main id="workspace" tabindex="-1">
+      <div class="load-error" id="load-error" role="alert" hidden><strong>Could not connect to the lab.</strong><p id="load-error-message"></p><button class="button secondary" id="retry-load" type="button">Try again</button></div>
+      <div id="lab-content" hidden>
+        <section class="intro" aria-labelledby="scenario-title">
+          <div class="eyebrow"><span id="scenario-index">EXPERIMENT 01</span><span class="eyebrow-dot">/</span><span id="scenario-engine"></span></div>
+          <h1 id="scenario-title"></h1>
+          <p class="scenario-subtitle" id="scenario-subtitle"></p>
+          <p class="scenario-summary" id="scenario-summary"></p>
+        </section>
+        <ol class="flow" aria-label="Experiment flow"><li><span>1</span>Input</li><li class="flow-arrow" aria-hidden="true">→</li><li><span>2</span>HTTP</li><li class="flow-arrow" aria-hidden="true">→</li><li><span>3</span>Server</li><li class="flow-arrow" aria-hidden="true">→</li><li><span>4</span>Result</li></ol>
+        <div class="experiment-toolbar">
+          <span class="toolbar-label">Version to run</span>
+          <div class="variant-switch" role="group" aria-label="Server version"><button type="button" data-variant="vulnerable" aria-pressed="true"><span class="variant-dot vulnerable-dot" aria-hidden="true"></span>Vulnerable</button><button type="button" data-variant="safe" aria-pressed="false"><span class="variant-dot safe-dot" aria-hidden="true"></span>Fixed</button></div>
+          <span class="toolbar-hint">Same input, different boundary.</span>
+        </div>
+        <div class="workbench">
+          <div class="execution-column">
+            <section class="panel input-panel" aria-labelledby="input-heading">
+              <div class="panel-heading"><h2 id="input-heading"><span class="step-number">1</span>Prepare the input</h2><span class="mini-label">EDITABLE</span></div>
+              <form id="run-form">
+                <div class="field-top"><label for="scenario-input" id="input-label">Input</label><div class="preset-buttons"><button class="text-button" type="button" id="normal-input">Normal input</button><button class="text-button exploit-preset" type="button" id="exploit-input">Exploit input</button></div></div>
+                <textarea id="scenario-input" rows="3" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="input-help"></textarea>
+                <p class="input-help" id="input-help">Preset buttons only fill in the input. Click Run to send the request.</p>
+                <div class="request-section">
+                  <div class="request-heading"><h2><span class="step-number">2</span>HTTP request to send</h2><button type="button" class="copy-button" id="copy-request" aria-label="Copy HTTP request">Copy</button></div>
+                  <pre class="request-preview" id="request-preview"></pre>
+                </div>
+                <div class="run-actions"><button class="button primary" id="run-button" type="submit"><span aria-hidden="true">▶</span> Run</button><button class="button secondary" id="compare-button" type="button">Compare both versions <span aria-hidden="true">⇄</span></button></div>
+              </form>
+            </section>
+            <section class="panel result-panel" aria-labelledby="result-heading" aria-busy="false" id="result-panel">
+              <div class="panel-heading"><h2 id="result-heading"><span class="step-number">4</span>Actual server result</h2><span class="mini-label" id="result-state">NOT RUN YET</span></div>
+              <div id="results" aria-live="polite" aria-atomic="false"><div class="empty-result"><span aria-hidden="true">↳</span><p>Send your first request.<small>The HTTP status, output, and execution trace will appear here.</small></p></div></div>
+            </section>
+            <details class="teaching-details"><summary>Experiment steps and expected behavior</summary><div class="details-content"><ol id="scenario-steps"></ol><dl class="expected-list"><div><dt>Normal input</dt><dd id="normal-expected"></dd></div><div><dt>Exploit · vulnerable version</dt><dd id="vulnerable-expected"></dd></div><div><dt>Exploit · fixed version</dt><dd id="safe-expected"></dd></div></dl><p class="small-note">These are experiment instructions. The result above comes only from the actual server response.</p></div></details>
+          </div>
+          <div class="source-column">
+            <section class="panel source-panel" aria-labelledby="source-heading">
+              <div class="panel-heading"><h2 id="source-heading"><span class="step-number">3</span>Code running on the server</h2><span class="source-badge" id="source-variant">Vulnerable</span></div>
+              <div class="code-toolbar"><span id="source-file"></span><div class="code-tools"><a id="source-full" href="#" target="_blank" rel="noopener">Full source file ↗</a><button class="copy-button" id="copy-code" type="button" aria-label="Copy server code">Copy</button></div></div>
+              <pre class="source-code" id="source-code" tabindex="0" aria-label="Source code of the Python function being executed"></pre>
+              <div class="code-legend"><span aria-hidden="true"></span>See how the highlighted lines use the input.</div>
+              <details class="route-details"><summary>How does the HTTP request reach this function?</summary><div class="route-content"><p id="route-file"></p><pre class="source-code route-code" id="route-code" tabindex="0"></pre></div></details>
+            </section>
+            <div class="lesson-notes">
+              <section class="lesson-note exploit-note"><span class="lesson-mark" aria-hidden="true">!</span><div><h3>Why does the exploit work?</h3><p id="scenario-explanation"></p></div></section>
+              <section class="lesson-note fix-note"><span class="lesson-mark" aria-hidden="true">✓</span><div><h3>What does the fixed version change?</h3><p id="scenario-fix"></p></div></section>
+            </div>
+            <details class="teaching-details scope-details"><summary>Experiment scope and sample files</summary><div class="details-content"><p id="scenario-scope"></p><pre id="scenario-fixtures"></pre></div></details>
+          </div>
+        </div>
+        <footer class="workspace-footer"><span>WEEK 02 · INJECTION LAB</span><span>Read the code. Follow the request. Explain the result.</span></footer>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

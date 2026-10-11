@@ -1,0 +1,221 @@
+% Derleme: xelatex -interaction=nonstopmode -halt-on-error zafiyet-analiz.tex
+% Baglantilar ve atiflar icin iki kez derleyin.
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]
+\usepackage[turkish,shorthands=off]{babel}
+\usepackage[left=24mm,right=24mm,top=22mm,bottom=23mm,footskip=11mm]{geometry}
+\usepackage{microtype}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage[hidelinks,unicode]{hyperref}
+\hypersetup{pdftitle={Zafiyet Analiz: Dönem Projesi Yönergesi},pdflang={tr-TR}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlength{\emergencystretch}{1.5em}
+\linespread{1.02}
+\setlength{\intextsep}{9pt}
+\setlength{\textfloatsep}{9pt}
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}{2.2ex plus .5ex minus .2ex}{1ex plus .2ex}{\normalfont\large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}{1.8ex plus .5ex minus .2ex}{.7ex plus .2ex}{\normalfont\normalsize\bfseries}}
+\makeatother
+\setlist{leftmargin=1.65em,itemsep=4pt,topsep=3pt,parsep=0pt}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\cve}[1]{\mbox{CVE-#1}}
+\pagestyle{plain}
+
+\begin{document}
+
+\begin{center}
+  \setlength{\parskip}{0pt}
+  {\large Güvenli Kodlama ve Programlama\par}
+  \vspace{6pt}
+  {\LARGE\bfseries Zafiyet Analiz\par}
+  \vspace{3pt}
+  {\large Dönem Projesi Yönergesi\par}
+  \vspace{10pt}
+  \small Bireysel çalışma \quad $\cdot$ \quad Dönem notuna katkı: \%20 \quad $\cdot$ \quad Video: 10–15 dakika
+\end{center}
+
+\section{Amaç ve kapsam}
+Bu ödevin amacı, yayımlanmış bir güvenlik açığının nedenini, etkisini ve giderilme yöntemini uygulamalı olarak incelemektir. Öğrenciden, seçtiği zafiyet için bir laboratuvar (lab) ortamı kurması, hatayı yeniden üretmesi ve düzeltme sonrasında elde edilen sonucu açıklaması beklenmektedir. Çalışma bireysel olarak yürütülecektir. Web, masaüstü ve mobil uygulamalar, API’ler, embedded sistemler, IoT cihazları ve firmware bileşenleri kapsam dahilindedir.
+
+\section{Konu seçimi}
+\textbf{Seçim önceliği:} Konu seçiminde mümkün olduğunca yaygın kullanılan, popüler ürünlere veya bilinen güvenlik vakalarına öncelik verilmelidir. Tarih sınırı yoktur; eski konular da popüler bir ürüne veya bilinen bir vakaya ilişkin olması hâlinde seçilebilir.
+
+Aşağıdaki iki yaklaşımdan biri seçilebilir:
+\begin{enumerate}[label=\alph*)]
+  \item \textbf{Gerçek ürün üzerinde CVE incelemesi.} Zafiyetli sürümü kurulabilen bir yazılım seçilir. CVE, yayımlanmış bir güvenlik açığının kayıt numarasıdır. İlgili zafiyet lab ortamında yeniden üretilir; ilgili kod veya yazılım davranışı ile düzeltme incelenir.
+  \item \textbf{Yayımlanmış bir vakanın incelenmesi.} Facebook, Instagram veya benzeri bir uygulamada açıklanmış bir güvenlik açığı ele alınabilir. Kaynak koduna erişilemiyorsa aynı hata mantığını içeren bir temsili lab hazırlanabilir; isteğe bağlı olarak reverse engineering ile ilgili yazılım da incelenebilir. Bu yaklaşımda CVE numarası aranmaz; vakayı açıklayan bir kaynak gösterilmesi gerekir.
+\end{enumerate}
+Öğrenciler, seçtikleri ürün veya vakayla ilgili detaylı sorularını iletmek ya da konunun projeye uygunluğu hakkında görüş almak için \href{mailto:canoztas.sektorkampuste@gmail.com}{\nolinkurl{canoztas.sektorkampuste@gmail.com}} adresine e-posta gönderebilir.
+
+\section{Uygulama aşamaları}
+\begin{enumerate}
+  \item \textbf{Lab kurulumu:} Docker, sanal makine, yerel uygulama, mobil emülatör veya firmware emülasyonu kullanılabilir. Öğrencinin kendi cihazıyla izole ortamda çalışması veya temsili lab hazırlaması da mümkündür. Sürümler ve kurulum adımları kaydedilmelidir.
+  \item \textbf{Zafiyetin yeniden üretilmesi:} Önce normal kullanım, ardından hatayı tetikleyen işlem gösterilmelidir. Beklenen ve gözlenen sonuçlar açıklanmalıdır.
+  \item \textbf{Nedenin incelenmesi:} Hataya yol açan kod, eksik kontrol veya yanlış varsayım belirlenmeli; güvenlik etkisiyle ilişkisi açıklanmalıdır.
+  \item \textbf{Düzeltmenin uygulanması:} Gerçek üründe yayımlanan yama incelenip uygulanmalı veya reverse engineering ile bir fix geliştirilmelidir. Temsili uygulamada uygun düzeltme geliştirilmelidir.
+  \item \textbf{Sonucun doğrulanması:} Aynı deneme düzeltmeden sonra tekrarlanmalı; zafiyetli davranışın giderildiği ve normal işlevin korunduğu gösterilmelidir.
+\end{enumerate}
+\textbf{Lab kurulumu ve uygulamalı gösterim zorunludur.} Tüm denemeler öğrencinin kendi yerel veya izole ortamında, sahte hesap ve verilerle yapılmalıdır. Üçüncü taraflara ait canlı sistemlerde deneme yapılmamalıdır.
+
+\newpage
+\section{Örnek konular}
+Aşağıdaki konu havuzu, yaygın kullanılan ürünleri ve bilinen platformlara ilişkin yayımlanmış vakaları kapsar. Öğrenci, bu ölçütleri karşılayan, kurulabilir ve incelenebilir başka bir konu da seçebilir. Her örnekte olayın hikâyesi, teknik odak ve önerilen lab kapsamı verilmiştir.
+\subsection{Ürün ve framework örnekleri}
+\begin{table}[!ht]
+\centering
+\caption{Ürün zafiyetleri ve önerilen lab kapsamları.}
+\label{tab:konular}
+\small
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{5pt}
+\begin{tabularx}{\textwidth}{@{}L{0.24\textwidth}YY@{}}
+\toprule
+\textbf{Ürün / CVE} & \textbf{Olay ve teknik odak} & \textbf{Önerilen lab} \\
+\midrule
+Apache HTTP Server\newline CVE-2021-41773~\cite{apache} & 2021’de path normalization hatası, belirli konfigürasyonlarda web kökü dışındaki dosyalara erişime yol açtı. İlk fix’in eksik kalması, patch analizi için de bir örnektir. & 2.4.49 ve 2.4.51 sürümlerini sahte bir dosyayla karşılaştırın. 2.4.50’deki ilk fix’in neden yeterli olmadığını açıklayın. \\
+\addlinespace[7pt]
+Django\newline CVE-2022-34265~\cite{django} & ORM kullanımı tek başına SQL injection’ı engellemiyordu: Trunc / Extract işlevlerindeki doğrulanmamış tarih bölümü girdisi SQL sorgusunu etkileyebiliyordu. & 3.2.13 ve 3.2.14 ile küçük bir uygulama kurun. İlgili girdinin sorguya nasıl ulaştığını ve fix’in neyi reddettiğini gösterin. \\
+\addlinespace[7pt]
+Grafana\newline CVE-2021-43798~\cite{grafana} & 2021’de dashboard platformunun plugin dosyalarını sunan yolu, path traversal nedeniyle uygulama klasörü dışındaki dosyaları okumaya izin veriyordu. & 8.3.0 ve 8.3.1’i karşılaştırın. Lab için oluşturduğunuz bir dosyayla hatayı ve path kontrolündeki fix’i gösterin. \\
+\addlinespace[7pt]
+Apache Log4j\newline CVE-2021-44228~\cite{log4j} & Log4Shell: Java loglama kütüphanesine verilen girdinin JNDI lookup olarak işlenmesi, uygun koşullarda remote code execution’a yol açabiliyordu. & Küçük bir Java uygulamasında yerel JNDI çağrısını gözlemleyin; fix sonrası davranışla karşılaştırın. Java sürümünü ve gerekli konfigürasyonu belgeleyin. \\
+\addlinespace[7pt]
+Next.js\newline CVE-2025-29927~\cite{nextjs} & 2025’te, authorization kontrolü middleware içinde yapılan uygulamalarda özel bir HTTP header ile kontrolün atlanabildiği açıklandı. & Yerel sunucuda 14.2.24 ve 14.2.25 ile korumalı bir sayfayı karşılaştırın. Fix sonrası aynı isteğin reddedildiğini gösterin. \\
+\addlinespace[7pt]
+GitLab CE/EE\newline CVE-2023-7028~\cite{gitlab} & 2024’te açıklanan hata, password reset e-postasının doğrulanmamış bir adrese gönderilmesine izin veriyordu. 2FA olmayan hesaplarda account takeover mümkündü. & 16.7.1 ve 16.7.2’yi sahte hesaplar ve yerel e-posta yakalayıcıyla karşılaştırın. Reset alıcısını ve 2FA’nın etkisini açıklayın. \\
+\addlinespace[7pt]
+Jenkins\newline CVE-2024-23897~\cite{jenkins} & 2024’te CLI argument parser’ın dosya içeriğini argümana dönüştürme özelliği, sunucuda file disclosure’a neden oldu. Okunabilen içerik yetkilere göre değişiyordu. & LTS 2.426.2 ve 2.426.3’ü sahte metin dosyasıyla karşılaştırın. Kullanıcı yetkisini ve parser fix’ini inceleyin. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+{\small Belirtilen sürümler yalnızca ilgili zafiyeti karşılaştırmak içindir. Lab kurulmadan önce kaynakta açıklanan konfigürasyon ve önkoşullar kontrol edilmelidir.}
+\newpage
+\subsection{Yayımlanmış hack vakaları ve araştırmalar}
+Bu örnekler gerçekleşmiş güvenlik olayları ile araştırmacıların yayımladığı bulguları içerir. Seçilen vakada ne yaşandığı, zafiyetin nasıl keşfedildiği ve teknik nedenleri rapor ve videolu sunumda anlatılmalıdır.
+\begingroup
+\small
+\par\addvspace{8pt}\noindent\textbf{Facebook: “View As” ve access token sızıntısı (2018)}~\cite{facebook}\par\nopagebreak
+Facebook, gerçek saldırıda kullanılan üç hatanın birleşimini açıkladı: yalnızca önizleme sunması gereken View As ekranında video yükleme bileşeni çalışıyor, yanlış kullanıcı için access token üretiyor ve bunu HTML içinde açığa çıkarıyordu. Saldırganlar bu token’larla başka kullanıcıların hesabına erişebiliyordu.
+
+\textbf{Lab fikri:} İki sahte hesaplı profil önizlemesi ve token üreten bir bileşen yazın. Kullanıcı bağlamının karışmasını gösterin; token üretimi ve authorization kontrollerini düzeltin.
+
+\par\addvspace{8pt}\noindent\textbf{Instagram: hesap kurtarmada rate limit bypass (2019)}~\cite{instagram}\par\nopagebreak
+Laxman Muthiyah, mobil hesap kurtarma akışındaki altı haneli kodun deneme sınırını araştırdı. Eşzamanlı istekler ve farklı IP’ler, mevcut rate limit’in beklenenden fazla denemeye izin vermesine yol açıyordu. Araştırmacı bulguyu Facebook’a bildirdi ve fix uygulandı.
+
+\textbf{Lab fikri:} Kodla password reset yapan küçük bir uygulama kurun. Birden fazla istemciyle deneme sınırını inceleyin; hesap bazlı ortak sayaç ve atomik kontrol ile fix’i gösterin.
+
+\par\addvspace{8pt}\noindent\textbf{Philips Hue Bridge: Zigbee üzerinden firmware zafiyeti (2020)}~\cite{hue}\par\nopagebreak
+Check Point araştırmacıları, akıllı ampulü taklit ederek Hue Bridge’in Zigbee mesajlarını işleme biçimini inceledi. Eşleştirme sırasında gönderilen uzun bir ZCL string’i, firmware’de heap-based buffer overflow’a ve bridge üzerinde kod çalıştırmaya yol açıyordu. CVE-2020-6007 için üretici bir firmware fix’i yayımladı.
+
+\textbf{Lab fikri:} Zigbee mesajı işlemeyi temsil eden küçük bir parser veya emüle firmware bileşeni kurun. Uzunluk kontrolündeki hatayı ve fix’i sentetik verilerle gösterin; gerçek vakayla ilişkisini açıklayın.
+
+\par\addvspace{8pt}\noindent\textbf{YouTube: TV özelliğinden private videolara erişim (2021)}~\cite{youtube}\par\nopagebreak
+David Schütz, hesabıyla giriş yapmadığı bir TV’nin kendi private videosunu nasıl oynattığını merak ederek araştırmaya başladı. Yayımladığı vakada, TV oynatma akışındaki eksik CSRF kontrolü kullanıcının video erişim token’ının araştırmacının taklit ettiği TV’ye aktarılmasına izin veriyordu.
+
+\textbf{Lab fikri:} Sahte videolar, kullanıcı oturumu ve temsili TV istemcisiyle bir paylaşım akışı kurun. CSRF nedeniyle istenmeyen token aktarımını ve erişim kontrolüyle giderilmesini gösterin.
+
+\par\addvspace{8pt}\noindent\textbf{TikTok Android: deep link ve WebView zinciri (2022)}~\cite{tiktok}\par\nopagebreak
+Microsoft araştırmacıları, deep link doğrulamasını aşarak WebView içinde güvenilmeyen bir URL açılabildiğini gösterdi. JavaScript bridge erişimiyle hesap üzerinde işlem yapılabiliyordu. CVE-2022-28799 olarak kaydedilen sorun TikTok tarafından düzeltildi; Microsoft aktif kötüye kullanım kanıtı bulmadığını belirtti.
+
+\textbf{Lab fikri:} Emülatörde küçük bir Android uygulaması, WebView ve yerel test sayfası kullanın. URL doğrulamasını ve bridge yetkilerini sınırlandırarak fix’i gösterin.
+
+\par\addvspace{8pt}\noindent\textbf{Google Pixel: SIM PUK akışından lock screen bypass (2022)}~\cite{pixel}\par\nopagebreak
+David Schütz, unuttuğu SIM PIN’ini PUK ile sıfırlarken telefonun kilit ekranında beklenmeyen davranış gördü. İnceleme, fiziksel erişimle cihaz kilidinin aşılabildiğini ortaya koydu. CVE-2022-20465, Kasım 2022 güvenlik güncellemesinde giderildi; Android fix’inin kaynak kodu yayımlandı.
+
+\textbf{Lab fikri:} SIM doğrulaması ile cihaz kilidini ayrı state’ler olarak modelleyen küçük bir uygulama yazın. Yanlış ekranın kapatılmasını ve state kontrolüyle fix’i gösterin; Android patch’iyle ilişkilendirin.
+
+\endgroup
+\newpage
+\section{Kapalı kaynak yazılımlar ve yapay zekâ kullanımı}
+Kapalı kaynak bir uygulama için, yalnızca incelenen vakayla ilgili işlevi içeren bir temsili lab hazırlanması yeterlidir. Basit bir arayüz ve birkaç sahte hesap kullanılabilir.
+
+\textbf{Reverse engineering isteğe bağlıdır.} Öğrenci bu yöntemle yazılımın davranışını inceleyebilir, kendi lab ortamında geliştirme veya fix yapıp sonucu test edebilir. Temsili lab hazırlamak da geçerli bir seçenektir.
+
+Uygulama, yapay zekâ destekli kodlama araçlarıyla (\emph{vibe coding}) geliştirilebilir. Kullanılan araçlar ve alınan desteğin kapsamı raporda belirtilmelidir. Öğrenci, üretilen kodu açıklayabilmeli; hatalı ve düzeltilmiş davranışı kendi ortamında doğrulamalıdır.
+
+Temsili uygulama kullanılan çalışmalar \emph{temsili lab} olarak adlandırılmalı; gerçek vakayla benzerlikler, sadeleştirmeler ve kullanılan düzeltme açıklanmalıdır.
+\begingroup
+\small
+\renewcommand{\refname}{Örnek konuların kaynakları}
+\begin{thebibliography}{99}
+\setlength{\itemsep}{4pt}
+\setlength{\parskip}{0pt}
+\bibitem{apache} Apache HTTP Server Project. \href{https://httpd.apache.org/security/vulnerabilities_24.html\#CVE-2021-41773}{\emph{Apache HTTP Server 2.4 vulnerabilities}}.
+\bibitem{django} Django Project. \href{https://docs.djangoproject.com/en/4.0/releases/3.2.14/}{\emph{Django 3.2.14 release notes}}.
+\bibitem{grafana} Grafana Labs. \href{https://grafana.com/blog/grafana-8-3-1-8-2-7-8-1-8-and-8-0-7-released-with-high-severity-security-fix/}{\emph{Grafana 8.3.1, 8.2.7, 8.1.8, and 8.0.7 security fix}}.
+\bibitem{log4j} Apache Logging Services. \href{https://logging.apache.org/security.html\#CVE-2021-44228}{\emph{Log4j security advisories: CVE-2021-44228}}.
+\bibitem{nextjs} Vercel / Next.js. \href{https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw}{\emph{Authorization Bypass in Next.js Middleware}}.
+\bibitem{gitlab} GitLab. \href{https://docs.gitlab.com/releases/patches/patch-release-gitlab-16-7-2-released/}{\emph{Critical Security Release: 16.7.2, 16.6.4, 16.5.6}}.
+\bibitem{jenkins} Jenkins Project. \href{https://www.jenkins.io/security/advisory/2024-01-24/}{\emph{Security Advisory 2024-01-24}}.
+\bibitem{facebook} Meta. \href{https://about.fb.com/news/2018/09/security-update/}{\emph{Security Update: View As}}.
+\bibitem{instagram} Laxman Muthiyah. \href{https://thezerohack.com/hack-any-instagram}{\emph{How I Could Have Hacked Any Instagram Account}}.
+\bibitem{hue} Check Point Research. \href{https://research.checkpoint.com/2020/dont-be-silly-its-only-a-lightbulb/}{\emph{Don’t be silly: it’s only a lightbulb}}.
+\bibitem{youtube} David Schütz. \href{https://bugs.xdavidhu.me/google/2021/04/05/i-built-a-tv-that-plays-all-of-your-private-youtube-videos/}{\emph{I Built a TV That Plays All of Your Private YouTube Videos}}.
+\bibitem{tiktok} Microsoft Security. \href{https://www.microsoft.com/en-us/security/blog/2022/08/31/vulnerability-in-tiktok-android-app-could-lead-to-one-click-account-hijacking/}{\emph{Vulnerability in TikTok Android app could lead to one-click account hijacking}}.
+\bibitem{pixel} David Schütz. \href{https://bugs.xdavidhu.me/google/2022/11/10/accidental-70k-google-pixel-lock-screen-bypass/}{\emph{Accidental \$70k Google Pixel Lock Screen Bypass}}.
+\end{thebibliography}
+\endgroup
+
+\newpage
+\begingroup
+\small
+\setlength{\parskip}{3pt}
+\setlist{itemsep=3pt,topsep=3pt}
+\section{Teslim edilecek çalışmalar}
+\subsection{Rapor}
+Rapor PDF biçiminde hazırlanmalıdır; \textbf{sayfa sınırı yoktur.} Öğrencinin adı, numarası ve seçilen konu belirtilmelidir. Zafiyet, konuyu önceden bilmeyen bir okuyucunun anlayabileceği ayrıntıda açıklanmalıdır:
+\begin{itemize}
+  \item \textbf{Zafiyet nedir?} Ürün veya vaka, etkilenen işlev ve sürümler, zafiyetin türü, oluşma koşulları ve kaynakları;
+  \item \textbf{Neden oluşur ve etkisi nedir?} Root cause, hatalı kod veya eksik kontrol; saldırganın kontrol ettiği girdi, gereken erişim ve olası güvenlik etkisi;
+  \item \textbf{Nasıl yeniden üretilir?} Lab kurulumu, sürümler, normal kullanım ve zafiyeti tetikleyen adımlar; beklenen ve gözlenen sonuçlar;
+  \item \textbf{Nasıl düzeltilir?} Yama veya fix'in neyi değiştirdiği, neden işe yaradığı ve aynı deneme ile normal kullanım testlerinin düzeltme sonrası sonuçları.
+\end{itemize}
+Kod parçaları ve ekran görüntüleri, neyi kanıtladıklarını açıklayan notlarla sunulmalıdır. Temsili lab kullanılmışsa gerçek vakayla ilişkisi; reverse engineering kullanılmışsa yöntem ve yapılan değişiklikler açıklanmalıdır.
+
+\subsection{Anlatım videosu}
+\textbf{10–15 dakikalık} bir ekran kaydı hazırlanmalıdır. Videolu sunumda zafiyetin ne olduğu, etkilenen işlev, oluşma koşulları, root cause ve güvenlik etkisi ayrıntılı anlatılmalıdır. Öğrenci kendi sesiyle labı, hatanın oluşumunu, fix'i ve doğrulama testlerini açıklayarak göstermelidir. Kamera zorunlu değildir; kurulumdaki bekleme süreleri çıkarılabilir.
+
+Video, YouTube'da liste dışı veya eğitmen erişimi önceden tanımlanmış gizli video olarak ya da Google Drive bağlantısıyla paylaşılabilir. \textbf{Bağlantı doğrudan erişilebilir olmalı; ``erişim iste'' ekranı veya ek izin onayı gerektirmemelidir.} Erişim ayarları teslimden önce kontrol edilmelidir.
+
+\subsection{Lab dosyaları}
+Kaynak kodu, gerekli konfigürasyonlar ve testler sunulmalıdır. \texttt{README.txt} veya \texttt{README.md}; sürümleri, kurulum ve çalıştırma komutlarını, deneme adımlarını ve beklenen sonuçları içermelidir. Hatalı ve düzeltilmiş kod ayrı klasör veya sürümlerde gösterilmelidir.
+
+\textbf{GitHub reposu kullanılması tavsiye edilir.} Repo; kod, README, rapor ve video bağlantısıyla CV'de paylaşılabilecek ve teknik görüşmelerde gösterilebilecek bir portföy projesi olabilir. GitHub kullanımı isteğe bağlıdır; repo eğitmen tarafından doğrudan erişilebilir olmalıdır.
+
+GitHub kullanılmıyorsa dosyalar \texttt{ogrenciNo\_konu.zip} olarak teslim edilebilir. Bağımlılık klasörleri ve büyük sanal makine dosyaları eklenmemelidir.
+
+\section{Değerlendirme}
+Çalışma 100 puan üzerinden değerlendirilecek ve dönem notuna \textbf{\%20} oranında katkı sağlayacaktır. Gerçek ürün incelemesi ve temsili lab aynı ölçütlerle değerlendirilecektir.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Değerlendirme ölçütleri.}
+\label{tab:puanlama}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabularx}{\textwidth}{@{}Xr@{}}
+\toprule
+\textbf{Ölçüt} & \textbf{Puan} \\
+\midrule
+Konu, etki ve kaynakların açıklığı & 10 \\
+Zafiyetin nedeninin kod veya kontrol üzerinden açıklanması & 25 \\
+Lab kurulumu ve zafiyetin yeniden üretilmesi & 20 \\
+Düzeltmenin açıklanması ve testlerle doğrulanması & 25 \\
+Raporun, kurulum notunun ve kaynak gösteriminin niteliği & 10 \\
+Videonun açıklığı ve uygulamalı anlatım & 10 \\
+\midrule
+\textbf{Toplam} & \textbf{100} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Takvim ve teslim:} Konu seçimi, teslim tarihleri ve teslim kanalı ders duyurusunda açıklanacaktır.
+
+\endgroup
+\end{document}

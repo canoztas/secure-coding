@@ -1,0 +1,111 @@
+/* Black classroom theme. Layout and reading sizes live in style.css. */
+:root {
+  color-scheme: dark;
+  --ink: #f2f3f5;
+  --muted: #aeb7c5;
+  --border: #30353e;
+  --subtle: #171a20;
+  --purple: #bdaaff;
+  --purple-dark: #d7caff;
+  --purple-light: #241d36;
+  --red: #ffab98;
+  --green: #8ddfbb;
+  --page: #08090b;
+  --surface: #111317;
+  --raised: #1b1e25;
+  --code: #0b0d10;
+  --dim: #9ca7b8;
+}
+
+body { background: var(--page); }
+.topbar, .sidebar { background: #0d0f12; }
+.panel, .load-error { background: var(--surface); box-shadow: 0 5px 24px #0003; }
+.panel-heading, .request-section, .code-toolbar, .code-legend,
+.route-details, .result-details, .workspace-footer { border-color: var(--border); }
+
+.brand-icon, .button.primary, .skip-link {
+  background: #7052ca;
+  color: #fff;
+  border-color: #9276e6;
+  box-shadow: none;
+}
+.button.primary:hover, .skip-link:hover { background: #7b5bd4; border-color: #b09af0; }
+
+.week-tag, .scenario-link, .sidebar-note strong, .toolbar-label,
+.field-top label, .empty-result p, .lesson-note h3,
+.expected-list dt, .result-details summary, .trace-item dt {
+  color: #c5cbd5;
+}
+.sidebar-heading, .sidebar-heading span:last-child, .nav-subtitle,
+.sidebar-footer, .scenario-subtitle, .scenario-summary, .flow,
+.toolbar-hint, .mini-label, .input-help, .empty-result small,
+.code-toolbar, .code-legend, .route-details summary, .route-content > p,
+.lesson-note p, .teaching-details, .small-note, .workspace-footer,
+.result-summary, .output-label, .result-meta, .load-error p {
+  color: var(--muted);
+}
+.eyebrow-dot, .flow .flow-arrow { color: var(--dim); }
+.note-symbol, .artifact-path, .code-tools a { color: #c1b0f0; }
+.code-tools a:hover { color: var(--purple-dark); }
+.connection.connected i { background: #78d4a7; box-shadow: 0 0 0 3px #183328; }
+.connection.failed i { background: #ff9c89; }
+
+.scenario-link:hover { background: #1b1922; }
+.scenario-link[aria-current="page"] { border-color: #51406c; }
+.nav-index, .flow li span { background: var(--raised); border-color: #3a414d; color: #c0cad9; }
+.scenario-link[aria-current="page"] .nav-index { background: #352749; border-color: #665183; }
+.scenario-link[aria-current="page"] .nav-subtitle { color: #c5b4e6; }
+.variant-switch { background: var(--code); border-color: var(--border); }
+.variant-switch button { color: var(--muted); }
+.variant-switch button[aria-pressed="true"] { background: #282b33; border-color: #525968; color: var(--ink); box-shadow: none; }
+.vulnerable-dot { background: #f6a18a; }
+.safe-dot { background: #80d8ad; }
+.step-number { background: #221c31; border-color: #4d3c6c; }
+
+.text-button, .button.secondary { background: var(--raised); border-color: #414956; color: #d4dbea; }
+.text-button:hover, .button.secondary:hover { background: #302440; border-color: #75608f; color: #e2d5ff; }
+.exploit-preset { color: #ffc0a6; background: #2a1e18; border-color: #624536; }
+.exploit-preset:hover { color: #ffd7c6; background: #3b271e; border-color: #966b51; }
+textarea { background: var(--code); border-color: #47505f; color: #ece8ff; }
+textarea:focus { outline-color: #8c74bf; border-color: #c2a7ff; }
+.input-help.constrained { color: #d9bf96; }
+.copy-button { color: #bfafdc; }
+.copy-button:hover { color: #eadfff; background: #302540; }
+.request-preview, .result-output { color: #d5dfef; background: var(--code); border-color: #303844; }
+.empty-result > span { color: #c5b0f0; background: #251e35; }
+
+.source-badge { color: #ffc2a6; background: #302018; border-color: #76503a; }
+.source-badge.safe { color: var(--green); background: #15291f; border-color: #355f49; }
+.code-toolbar, .route-details, .teaching-details { background: #15181d; border-color: var(--border); }
+.source-code, .route-code { background: var(--code); color: #dde3ee; }
+.line-number { color: #96a0b1; }
+.code-line.focus-line { background: #302514; border-left-color: #e7b569; }
+.code-line.focus-line .line-number { color: #e7bf81; }
+.source-panel.safe .focus-line { background: #152b21; border-left-color: #77c9a0; }
+.source-panel.safe .focus-line .line-number { color: #95d2b1; }
+.code-legend > span { background: #604821; border-color: #cba060; }
+.source-panel.safe .code-legend > span { background: #315f48; border-color: #78ba99; }
+
+.lesson-mark { background: #2c1d17; border-color: #75503d; color: #ffb593; }
+.fix-note .lesson-mark { background: #162c20; border-color: #426c51; color: #96dab0; }
+.http-status { color: #c5d5e9; border-color: #44566f; background: #1b2532; }
+.http-status.success { color: #95e0b7; border-color: #36684b; background: #15291e; }
+.http-status.client-error { color: #f5ce8b; border-color: #7b6039; background: #302617; }
+.http-status.server-error { color: #ffb2a9; border-color: #85544c; background: #351e1b; }
+.trace-item { border-color: #69548b; }
+.trace-item dd { color: #cbd6e7; }
+.response-error, .load-error { color: #ffc2b6; background: #261916; border-color: #69443b; }
+.input-changed { color: #efd09f; border-color: #634d2e; background: #2b2215; }
+.spinner { border-color: #45375c; border-top-color: var(--purple); }
+.toast { background: #30263f; color: #f0e7ff; border: 1px solid #75638f; box-shadow: 0 8px 24px #0008; }
+
+button:focus-visible, a:focus-visible, summary:focus-visible, pre:focus-visible {
+  outline-color: #c6afff;
+}
+::selection { color: #fff; background: #654b92; }
+* { scrollbar-color: #626a79 #111317; }
+
+@media (max-width: 620px) {
+  .scenario-link { border-color: #383c48; }
+  .scenario-link[aria-current="page"] { border-color: #725c93; }
+}

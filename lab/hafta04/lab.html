@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="tr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kripto lab · Ders 4</title><link rel="stylesheet" href="/lab.css"><script src="/lab.js" defer></script></head>
+<body data-lab="{{LAB}}" data-fixed="{{FIXED}}"><main>
+<nav><a href="/">DERS 4 / KRİPTO LAB</a><span>{{MODE}} · Yerel, sentetik veriler</span></nav>
+<section id="home" hidden>
+<p class="eyebrow">ALICE → BOB</p><h1>Şifreli notu adım adım açalım.</h1>
+<p class="intro">Alice, Bob'a bir not gönderiyor. İki farklı uygulama hatasını hazır düğmelerle göstereceğiz. Her labın sonunda sonucu ve açıklamalı çözümü birlikte göreceğiz.</p>
+<div class="choices"><a class="choice" href="/lab/1"><span>01 / BRUTE FORCE</span><h2>10.000 olasılık</h2><p>Paketi incele → ilk PIN'i dene → adayları tara → sonucu açıkla.</p><b>Lab 1'i göster →</b></a>
+<a class="choice" href="/lab/2"><span>02 / HATA SAYFASI</span><h2>Fazla konuşan hata</h2><p>Paketi incele → hatayı aç → sızan key ile çöz → sonucu açıkla.</p><b>Lab 2'yi göster →</b></a></div></section>
+<section id="exercise" hidden>
+<p class="eyebrow" id="label"></p><h1 id="title"></h1><p class="intro" id="task"></p>
+<ol class="step-list" aria-label="Gösterim adımları"><li aria-current="step">1 · Paket</li><li>2 · İlk gözlem</li><li>3 · Notu aç</li><li>4 · Çözüm</li></ol>
+<section class="panel demo-step" id="step-1"><h2>1. Alice'in gönderdiği paketi incele</h2>
+<p>Şifreli içerik elimizde. Bob'un okuduğu notu görebilmek için hangi bilgi eksik?</p>
+<details id="application-code" hidden><summary>Uygulama bu paketi hangi kodla üretti?</summary>
+<p id="application-code-help"></p><pre id="application-snippet"></pre>
+<p class="code-caption">Python · lab.py içindeki key üretimi ve şifrelemenin sadeleştirilmiş akışı. <code>message</code>, Alice'in notunun baytlarıdır. Son argümandaki <code>None</code>, ek doğrulama verisi kullanmadığımızı belirtir; import'lar burada gösterilmedi.</p></details>
+<button id="inspect" type="button">Şifreli paketi göster</button>
+<div id="packet-view" hidden><p id="key-source"></p><p>Nonce açıkça taşınıyor; secret olan key pakette bulunmuyor.</p>
+<p>Şifreli içerik + doğrulama tag'i:</p><pre id="ciphertext"></pre>
+<details><summary>Paketin tamamı · JSON</summary><pre id="package"></pre><a id="download">JSON indir</a></details>
+<button id="next-observe" class="secondary" type="button">2. adıma geç →</button></div></section>
+<section class="panel demo-step" id="step-2" hidden><h2 id="observe-title"></h2><p id="observe-help"></p>
+<div id="pin-examples" hidden><p>Muhtemel PIN'ler: her biri tam dört rakam.</p>
+<div class="pin-list" aria-label="PIN adayları"><code>0000</code><code>0001</code><code>0002</code><span>…</span><code>9998</code><code>9999</code></div>
+<p>10 × 10 × 10 × 10 = <strong>10.000 aday</strong>. Her PIN'den farklı bir aday key hesaplıyoruz.</p></div>
+<button id="observe" type="button"></button>
+<div id="observation" hidden><p id="observation-status" role="status"></p><pre id="observation-output"></pre>
+<p id="preview-row" hidden><a href="/lab/2/preview?format=xml" target="_blank" rel="noopener">Aynı hata sayfasını ayrı sekmede aç →</a></p>
+<button id="next-run" class="secondary" type="button">3. adıma geç →</button></div></section>
+<section class="panel demo-step" id="step-3" hidden><h2 id="run-title"></h2><p id="run-help"></p>
+<div id="bruteforce-target" hidden>
+<h3>Brute force'u nereye uyguluyoruz?</h3>
+<div class="target-map" role="group" aria-label="Sunucudan tek paket alınır; PIN denemeleri tarayıcıdaki şifreli paket üzerinde yapılır">
+<div class="target-node"><span class="eyebrow">SUNUCU</span><strong>Şifreli paketi verir</strong><code>GET /api/lab/1</code><span>Key, yanıtta yok.</span></div>
+<span class="map-arrow" aria-hidden="true">→</span>
+<div class="target-node local-target"><span class="eyebrow">BU TARAYICI · OFFLINE</span><strong>Aynı şifreli paket üzerinde dene</strong><code>PIN → SHA-256 → aday key</code><span>AES-GCM ile çöz → tag doğrulandı mı?</span><code id="target-packet"></code></div>
+</div>
+<p class="takeaway">Her aday bu tarayıcıdaki <strong>ciphertext + tag</strong> üzerinde denenir. Paketle gelen nonce aynı kalır. Bir giriş formuna PIN göndermiyoruz.</p>
+<div class="request-counts" aria-live="polite"><span>Paket indirme: <strong id="package-requests">0</strong> istek</span><span>Sonuç kontrolü: <strong id="check-requests">0</strong> istek</span></div>
+<p class="code-caption">Not açıldıktan sonra <code>POST /api/check</code> yalnız gösterim sonucunu onaylar. PIN araması bu endpoint'e yapılmaz.</p>
+<details id="attempt-code"><summary>Hazır deneme döngüsünü göster</summary>
+<pre>for number in range(10_000):
+    pin = f"{number:04d}"
+    key = hashlib.sha256(pin.encode("ascii")).digest()
+    try:
+        note = AESGCM(key).decrypt(nonce, sealed, None)
+        break  # Paket doğrulandı; not açıldı.
+    except InvalidTag:
+        continue  # Sonraki PIN.</pre>
+<p class="code-caption">Python · cozum.py ile aynı mantık. Bu sayfa hazır Web Crypto kodunu çalıştırır. Döngüde HTTP isteği yoktur.</p></details>
+</div>
+<button id="run" type="button"></button>
+<div id="progress-view" hidden><progress id="progress" max="10000" value="0" aria-label="Denenen PIN sayısı"></progress>
+<p id="attempt-count" role="status" aria-live="polite"></p><pre id="attempt-log"></pre></div>
+<div id="outcome" hidden><p id="result" role="status" aria-live="polite"></p><pre id="plaintext" hidden></pre>
+<p id="outcome-reason"></p><button id="next-solution" class="secondary" type="button">4. Çözümü açıkla →</button></div></section>
+<section class="panel demo-step" id="step-4" hidden><h2>4. Çözüm: ne oldu, nasıl düzelir?</h2>
+<ol id="solution-steps"></ol><p id="solution-fix" class="takeaway"></p>
+<p><a id="compare">Aynı gösterimi diğer sürümde aç →</a> <span class="muted">(İki lab sunucusu da açık olmalı.)</span></p>
+<details id="source-code"><summary>Hazır çözüm kodu · isteğe bağlı</summary>
+<p>Gösterim yukarıdaki düğmelerle tamamlanır. Python çözümü ayrıca incelenebilir:</p><pre id="solution-command"></pre>
+<a href="/cozum.py" download="cozum.py">Çözüm kodunu indir · cozum.py</a><pre id="solution-code">Çözüm kodu yükleniyor…</pre></details>
+<button id="restart" class="secondary" type="button">Baştan göster ↺</button></section>
+<p id="page-error" role="alert" hidden></p></section>
+</main></body></html>

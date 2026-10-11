@@ -1,0 +1,1340 @@
+{
+  "generated_at_utc": "2026-10-11T21:40:01.497285+00:00",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.10",
+    "Flask": "3.0.3",
+    "Jinja2": "3.1.6",
+    "lxml": "6.0.2",
+    "playwright": "1.58.0"
+  },
+  "scope": "Real local HTTP plus browser UI. NoSQL is a Python model; no MongoDB process.",
+  "server_shutdown": true,
+  "all_passed": true,
+  "javascript_errors": [],
+  "source_sha256": {
+    "app.py": "77bcc12fb143ec758bb7bc9ab8bcd7ae6ac402aabc64e716d2cf40d16d7d51d2",
+    "catalog.py": "43e3800cb9d33dba8ba3df10101feb56eef5d96ca4a94127e4d59b40ddc2dae6",
+    "process_scenarios.py": "ade74fc15f6e5159ece0a9ee8a68eb595c24aaa913eb750b851f5554a9c34e83",
+    "scenarios.py": "222b8536de9ef00245e241a2ea3674008e778d8b5b58d079f2610262f46a1516",
+    "structured_scenarios.py": "1b5098408f5b7380004759078b659bd12524c1ad88e3b93ba227f0a2bdd449e1",
+    "verify.py": "2721ea69a706de065cb611705fff42f7091c78a735e35870f1a75f4b581a9763",
+    "requirements.txt": "68b31000539d621e16b3261baaf1a9fb9d3e43994b6cc22ef44e0cc1009b81e5",
+    "README.md": "59760709d22bd1fd019f3e24e8876e3f81e14679a9a06d427bec44c782e85150",
+    "static/app.js": "34545a6ad34598df591d88613b72d661a986f6504c131eadcc151f386cbdd981",
+    "static/index.html": "a6b56b76af4bc7cded839ced0af96a8d65ad8e6e3d983f4f79c2913b3ff4d6fe",
+    "static/style.css": "dc404d503cf7c1d13d3e9618b7c00e43ddbad8848bc8ea07ff380f916e4b6da4",
+    "static/theme.css": "d9baefcc89b46d92236fc5d776d3829b3180be5a1480d66601cc84c34dd0adb0"
+  },
+  "http_cases": [
+    {
+      "scenario": "sql",
+      "preset": "normal",
+      "variant": "vulnerable",
+      "input": "1",
+      "actual": {
+        "status": 200,
+        "output": [
+          {
+            "name": "alice",
+            "email": "alice@example.test"
+          }
+        ],
+        "trace": [
+          {
+            "label": "uid · str",
+            "value": "1"
+          },
+          {
+            "label": "SQL sent to SQLite",
+            "value": "SELECT name, email FROM users WHERE id = 1"
+          },
+          {
+            "label": "Separate parameters",
+            "value": []
+          },
+          {
+            "label": "fetchall() · row count",
+            "value": 1
+          }
+        ],
+        "summary": "SQLite selected 1 row(s). The input was interpreted as part of the SQL statement.",
+        "scenario": "sql",
+        "variant": "vulnerable",
+        "request_id": "e7a3f12a8d82",
+        "source_sha256": "6307d849b20e7a1c79bd68309da604cc75e358923ee2bc5d6f647cc39508311e",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "sql",
+      "preset": "normal",
+      "variant": "safe",
+      "input": "1",
+      "actual": {
+        "status": 200,
+        "output": [
+          {
+            "name": "alice",
+            "email": "alice@example.test"
+          }
+        ],
+        "trace": [
+          {
+            "label": "uid · str",
+            "value": "1"
+          },
+          {
+            "label": "Fixed SQL statement",
+            "value": "SELECT name, email FROM users WHERE id = ?"
+          },
+          {
+            "label": "Separate parameter list",
+            "value": [
+              "1"
+            ]
+          },
+          {
+            "label": "fetchall() · row count",
+            "value": 1
+          }
+        ],
+        "summary": "1 row(s) returned. The input is treated as a single parameter value, not a query condition.",
+        "scenario": "sql",
+        "variant": "safe",
+        "request_id": "2d0d00f08ebb",
+        "source_sha256": "958cae6bd1348e9ddf1c3b54bfe6c856c3c6a8bc0ad5473bc14120a5ff20d5d8",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "sql",
+      "preset": "exploit",
+      "variant": "vulnerable",
+      "input": "1 OR 1=1",
+      "actual": {
+        "status": 200,
+        "output": [
+          {
+            "name": "alice",
+            "email": "alice@example.test"
+          },
+          {
+            "name": "bob",
+            "email": "bob@example.test"
+          }
+        ],
+        "trace": [
+          {
+            "label": "uid · str",
+            "value": "1 OR 1=1"
+          },
+          {
+            "label": "SQL sent to SQLite",
+            "value": "SELECT name, email FROM users WHERE id = 1 OR 1=1"
+          },
+          {
+            "label": "Separate parameters",
+            "value": []
+          },
+          {
+            "label": "fetchall() · row count",
+            "value": 2
+          }
+        ],
+        "summary": "SQLite selected 2 row(s). The input was interpreted as part of the SQL statement.",
+        "scenario": "sql",
+        "variant": "vulnerable",
+        "request_id": "9e2ecc1e7ae0",
+        "source_sha256": "6307d849b20e7a1c79bd68309da604cc75e358923ee2bc5d6f647cc39508311e",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "sql",
+      "preset": "exploit",
+      "variant": "safe",
+      "input": "1 OR 1=1",
+      "actual": {
+        "status": 200,
+        "output": [],
+        "trace": [
+          {
+            "label": "uid · str",
+            "value": "1 OR 1=1"
+          },
+          {
+            "label": "Fixed SQL statement",
+            "value": "SELECT name, email FROM users WHERE id = ?"
+          },
+          {
+            "label": "Separate parameter list",
+            "value": [
+              "1 OR 1=1"
+            ]
+          },
+          {
+            "label": "fetchall() · row count",
+            "value": 0
+          }
+        ],
+        "summary": "0 row(s) returned. The input is treated as a single parameter value, not a query condition.",
+        "scenario": "sql",
+        "variant": "safe",
+        "request_id": "8f21d6d477f4",
+        "source_sha256": "958cae6bd1348e9ddf1c3b54bfe6c856c3c6a8bc0ad5473bc14120a5ff20d5d8",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "command",
+      "preset": "normal",
+      "variant": "vulnerable",
+      "input": "alice",
+      "actual": {
+        "status": 200,
+        "output": "Hello alice\n",
+        "trace": [
+          {
+            "label": "Text interpreted by the shell",
+            "value": "/usr/bin/echo Hello alice"
+          },
+          {
+            "label": "Actual subprocess argv",
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\bin\\\\sh.exe\", \"-c\", \"/usr/bin/echo Hello alice\"]"
+          },
+          {
+            "label": "subprocess shell",
+            "value": "False"
+          },
+          {
+            "label": "returncode",
+            "value": "0"
+          },
+          {
+            "label": "stdout",
+            "value": "Hello alice\n"
+          },
+          {
+            "label": "stderr",
+            "value": ""
+          }
+        ],
+        "summary": "The POSIX shell interpreted the concatenated command text and printed the greeting.",
+        "artifacts": [],
+        "scenario": "command",
+        "variant": "vulnerable",
+        "request_id": "e43d51fc2812",
+        "source_sha256": "623e62c9db926c4cd13db47093c5a775e9d5cf440f5875cd91fd59d2ed4384ce"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "command",
+      "preset": "normal",
+      "variant": "safe",
+      "input": "alice",
+      "actual": {
+        "status": 200,
+        "output": "Hello alice\n",
+        "trace": [
+          {
+            "label": "Actual subprocess argv",
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\usr\\\\bin\\\\echo.exe\", \"Hello\", \"alice\"]"
+          },
+          {
+            "label": "subprocess shell",
+            "value": "False"
+          },
+          {
+            "label": "returncode",
+            "value": "0"
+          },
+          {
+            "label": "stdout",
+            "value": "Hello alice\n"
+          },
+          {
+            "label": "stderr",
+            "value": ""
+          }
+        ],
+        "summary": "No shell was invoked. The input was passed to echo as a single argv item; the semicolon is plain text.",
+        "artifacts": [],
+        "scenario": "command",
+        "variant": "safe",
+        "request_id": "b1fa490a4f08",
+        "source_sha256": "f1aab920defc78ec2840c2098d0920e105ae0a52e805fe45c75a79d31dc0ba9a"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "command",
+      "preset": "exploit",
+      "variant": "vulnerable",
+      "input": "alice; echo DEMO",
+      "actual": {
+        "status": 200,
+        "output": "Hello alice\nDEMO\n",
+        "trace": [
+          {
+            "label": "Text interpreted by the shell",
+            "value": "/usr/bin/echo Hello alice; echo DEMO"
+          },
+          {
+            "label": "Actual subprocess argv",
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\bin\\\\sh.exe\", \"-c\", \"/usr/bin/echo Hello alice; echo DEMO\"]"
+          },
+          {
+            "label": "subprocess shell",
+            "value": "False"
+          },
+          {
+            "label": "returncode",
+            "value": "0"
+          },
+          {
+            "label": "stdout",
+            "value": "Hello alice\nDEMO\n"
+          },
+          {
+            "label": "stderr",
+            "value": ""
+          }
+        ],
+        "summary": "An explicit sh -c call enables shell interpretation; the semicolon started a second echo command.",
+        "artifacts": [],
+        "scenario": "command",
+        "variant": "vulnerable",
+        "request_id": "bd18653480b9",
+        "source_sha256": "623e62c9db926c4cd13db47093c5a775e9d5cf440f5875cd91fd59d2ed4384ce"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "command",
+      "preset": "exploit",
+      "variant": "safe",
+      "input": "alice; echo DEMO",
+      "actual": {
+        "status": 200,
+        "output": "Hello alice; echo DEMO\n",
+        "trace": [
+          {
+            "label": "Actual subprocess argv",
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\usr\\\\bin\\\\echo.exe\", \"Hello\", \"alice; echo DEMO\"]"
+          },
+          {
+            "label": "subprocess shell",
+            "value": "False"
+          },
+          {
+            "label": "returncode",
+            "value": "0"
+          },
+          {
+            "label": "stdout",
+            "value": "Hello alice; echo DEMO\n"
+          },
+          {
+            "label": "stderr",
+            "value": ""
+          }
+        ],
+        "summary": "No shell was invoked. The input was passed to echo as a single argv item; the semicolon is plain text.",
+        "artifacts": [],
+        "scenario": "command",
+        "variant": "safe",
+        "request_id": "935522e84349",
+        "source_sha256": "f1aab920defc78ec2840c2098d0920e105ae0a52e805fe45c75a79d31dc0ba9a"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "argument",
+      "preset": "normal",
+      "variant": "vulnerable",
+      "input": "notes.txt",
+      "actual": {
+        "status": 200,
+        "output": "Add notes\n",
+        "trace": [
+          {
+            "label": "Actual subprocess argv",
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-xa7sv0nj\\\\git_eo1bd6_0\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-xa7sv0nj\\\\git_eo1bd6_0\", \"log\", \"-1\", \"--format=%s\", \"notes.txt\"]"
+          },
+          {
+            "label": "subprocess shell",
+            "value": "False"
+          },
+          {
+            "label": "returncode",
+            "value": "0"
+          },
+          {
+            "label": "stdout",
+            "value": "Add notes\n"
+          },
+          {
+            "label": "stderr",
+            "value": ""
+          },
+          {
+            "label": "demo.txt created in the temporary repository",
+            "value": "No"
+          }
+        ],
+        "summary": "No shell was used; Git wrote the latest commit subject for notes.txt to standard output.",
+        "artifacts": [],
+        "scenario": "argument",
+        "variant": "vulnerable",
+        "request_id": "27fe581681c2",
+        "source_sha256": "6d0cccbb27c8a73cbabe361e67f814834f7727ac50e44186cd4e211b24d3465c"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "argument",
+      "preset": "normal",
+      "variant": "safe",
+      "input": "notes.txt",
+      "actual": {
+        "status": 200,
+        "output": "Add notes\n",
+        "trace": [
+          {
+            "label": "Actual subprocess argv",
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-_v6u2ltr\\\\git__mddmdqd\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-_v6u2ltr\\\\git__mddmdqd\", \"log\", \"-1\", \"--format=%s\", \"--\", \"notes.txt\"]"
+          },
+          {
+            "label": "subprocess shell",
+            "value": "False"
+          },
+          {
+            "label": "returncode",
+            "value": "0"
+          },
+          {
+            "label": "stdout",
+            "value": "Add notes\n"
+          },
+          {
+            "label": "stderr",
+            "value": ""
+          },
+          {
+            "label": "demo.txt created in the temporary repository",
+            "value": "No"
+          }
+        ],
+        "summary": "No shell was used. After --, notes.txt was treated as a file path and its commit subject was printed.",
+        "artifacts": [],
+        "scenario": "argument",
+        "variant": "safe",
+        "request_id": "f9dd51d37a0b",
+        "source_sha256": "558859837dca49a2e8e5efba8eba1b7f35ec8d86dc6ca060aa18116eaed8c2bc"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "argument",
+      "preset": "exploit",
+      "variant": "vulnerable",
+      "input": "--output=demo.txt",
+      "actual": {
+        "status": 200,
+        "output": "",
+        "trace": [
+          {
+            "label": "Actual subprocess argv",
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-45dloqxt\\\\git_5rvocv1d\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-45dloqxt\\\\git_5rvocv1d\", \"log\", \"-1\", \"--format=%s\", \"--output=demo.txt\"]"
+          },
+          {
+            "label": "subprocess shell",
+            "value": "False"
+          },
+          {
+            "label": "returncode",
+            "value": "0"
+          },
+          {
+            "label": "stdout",
+            "value": ""
+          },
+          {
+            "label": "stderr",
+            "value": ""
+          },
+          {
+            "label": "demo.txt created in the temporary repository",
+            "value": "Yes"
+          }
+        ],
+        "summary": "Despite shell=False, Git interpreted the input as an --output option and wrote to demo.txt.",
+        "artifacts": [
+          {
+            "path": "demo.txt",
+            "content": "Add notes\n"
+          }
+        ],
+        "scenario": "argument",
+        "variant": "vulnerable",
+        "request_id": "5ea440056f33",
+        "source_sha256": "6d0cccbb27c8a73cbabe361e67f814834f7727ac50e44186cd4e211b24d3465c"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "argument",
+      "preset": "exploit",
+      "variant": "safe",
+      "input": "--output=demo.txt",
+      "actual": {
+        "status": 200,
+        "output": "",
+        "trace": [
+          {
+            "label": "Actual subprocess argv",
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-f53zzluh\\\\git_w_vns_b_\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-f53zzluh\\\\git_w_vns_b_\", \"log\", \"-1\", \"--format=%s\", \"--\", \"--output=demo.txt\"]"
+          },
+          {
+            "label": "subprocess shell",
+            "value": "False"
+          },
+          {
+            "label": "returncode",
+            "value": "0"
+          },
+          {
+            "label": "stdout",
+            "value": ""
+          },
+          {
+            "label": "stderr",
+            "value": ""
+          },
+          {
+            "label": "demo.txt created in the temporary repository",
+            "value": "No"
+          }
+        ],
+        "summary": "No shell was used. -- ended option parsing; --output=demo.txt was treated as a file path and matched nothing.",
+        "artifacts": [],
+        "scenario": "argument",
+        "variant": "safe",
+        "request_id": "790071b4abc1",
+        "source_sha256": "558859837dca49a2e8e5efba8eba1b7f35ec8d86dc6ca060aa18116eaed8c2bc"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "path",
+      "preset": "normal",
+      "variant": "vulnerable",
+      "input": "notes.txt",
+      "actual": {
+        "status": 200,
+        "output": "Lesson note: validate untrusted input.",
+        "trace": [
+          {
+            "label": "file · str",
+            "value": "notes.txt"
+          },
+          {
+            "label": "Joined path",
+            "value": "/demo/data/notes.txt"
+          },
+          {
+            "label": "After resolve()",
+            "value": "/demo/data/notes.txt"
+          },
+          {
+            "label": "Inside the data directory?",
+            "value": true
+          }
+        ],
+        "summary": "The lesson note was read.",
+        "scenario": "path",
+        "variant": "vulnerable",
+        "request_id": "747c37d0bd93",
+        "source_sha256": "cf8e107fb709e1f467bfd15a076c643990fb5b297b423d9f1b8ad5df50c01f5b",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "path",
+      "preset": "normal",
+      "variant": "safe",
+      "input": "notes.txt",
+      "actual": {
+        "status": 200,
+        "output": "Lesson note: validate untrusted input.",
+        "trace": [
+          {
+            "label": "file · str",
+            "value": "notes.txt"
+          },
+          {
+            "label": "Joined path",
+            "value": "/demo/data/notes.txt"
+          },
+          {
+            "label": "After resolve()",
+            "value": "/demo/data/notes.txt"
+          },
+          {
+            "label": "Inside the data directory?",
+            "value": true
+          }
+        ],
+        "summary": "The directory boundary check passed. The normal lesson note was read.",
+        "scenario": "path",
+        "variant": "safe",
+        "request_id": "638ca0cfb530",
+        "source_sha256": "e9dc3f8312ee04d9a6b54d01b68c6c1d4f1e22aa96097d810d19ce74790f46b6",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "path",
+      "preset": "exploit",
+      "variant": "vulnerable",
+      "input": "../private/demo-secret.txt",
+      "actual": {
+        "status": 200,
+        "output": "DEMO_ONLY=classroom-example",
+        "trace": [
+          {
+            "label": "file · str",
+            "value": "../private/demo-secret.txt"
+          },
+          {
+            "label": "Joined path",
+            "value": "/demo/data/../private/demo-secret.txt"
+          },
+          {
+            "label": "After resolve()",
+            "value": "/demo/private/demo-secret.txt"
+          },
+          {
+            "label": "Inside the data directory?",
+            "value": false
+          }
+        ],
+        "summary": "The fictional private file outside the data directory was read.",
+        "scenario": "path",
+        "variant": "vulnerable",
+        "request_id": "aa980c0553a0",
+        "source_sha256": "cf8e107fb709e1f467bfd15a076c643990fb5b297b423d9f1b8ad5df50c01f5b",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "path",
+      "preset": "exploit",
+      "variant": "safe",
+      "input": "../private/demo-secret.txt",
+      "actual": {
+        "status": 403,
+        "output": "Forbidden",
+        "trace": [
+          {
+            "label": "file · str",
+            "value": "../private/demo-secret.txt"
+          },
+          {
+            "label": "Joined path",
+            "value": "/demo/data/../private/demo-secret.txt"
+          },
+          {
+            "label": "After resolve()",
+            "value": "/demo/private/demo-secret.txt"
+          },
+          {
+            "label": "Inside the data directory?",
+            "value": false
+          }
+        ],
+        "summary": "The resolved path is outside the data directory. The request was rejected before reading the file.",
+        "scenario": "path",
+        "variant": "safe",
+        "request_id": "16efc15aab96",
+        "source_sha256": "e9dc3f8312ee04d9a6b54d01b68c6c1d4f1e22aa96097d810d19ce74790f46b6",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "ssti",
+      "preset": "normal",
+      "variant": "vulnerable",
+      "input": "alice",
+      "actual": {
+        "status": 200,
+        "output": "Hello alice",
+        "trace": [
+          {
+            "label": "name · str",
+            "value": "alice"
+          },
+          {
+            "label": "Template compiled by Jinja",
+            "value": "Hello alice"
+          },
+          {
+            "label": "Separate data",
+            "value": {}
+          }
+        ],
+        "summary": "Jinja compiled and rendered this text as a template. In this version, the input becomes part of the template source.",
+        "scenario": "ssti",
+        "variant": "vulnerable",
+        "request_id": "5c7782def433",
+        "source_sha256": "2caded8348739a9352cd7a4fe65461caf1103c36d3d777648c876094d2dd68b8",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "ssti",
+      "preset": "normal",
+      "variant": "safe",
+      "input": "alice",
+      "actual": {
+        "status": 200,
+        "output": "Hello alice",
+        "trace": [
+          {
+            "label": "name · str",
+            "value": "alice"
+          },
+          {
+            "label": "Fixed Jinja template",
+            "value": "Hello {{ name }}"
+          },
+          {
+            "label": "Separate data",
+            "value": {
+              "name": "alice"
+            }
+          }
+        ],
+        "summary": "The input was inserted as the name value. Any {{ … }} inside it was not evaluated as template code.",
+        "scenario": "ssti",
+        "variant": "safe",
+        "request_id": "58c106d54603",
+        "source_sha256": "d4a3a607bf5cfd9ac0841acfaa45fae9e59a4710abc541e8f6506fa898c7daed",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "ssti",
+      "preset": "exploit",
+      "variant": "vulnerable",
+      "input": "{{ 7*7 }}",
+      "actual": {
+        "status": 200,
+        "output": "Hello 49",
+        "trace": [
+          {
+            "label": "name · str",
+            "value": "{{ 7*7 }}"
+          },
+          {
+            "label": "Template compiled by Jinja",
+            "value": "Hello {{ 7*7 }}"
+          },
+          {
+            "label": "Separate data",
+            "value": {}
+          }
+        ],
+        "summary": "Jinja compiled and rendered this text as a template. In this version, the input becomes part of the template source.",
+        "scenario": "ssti",
+        "variant": "vulnerable",
+        "request_id": "dd88557442c9",
+        "source_sha256": "2caded8348739a9352cd7a4fe65461caf1103c36d3d777648c876094d2dd68b8",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "ssti",
+      "preset": "exploit",
+      "variant": "safe",
+      "input": "{{ 7*7 }}",
+      "actual": {
+        "status": 200,
+        "output": "Hello {{ 7*7 }}",
+        "trace": [
+          {
+            "label": "name · str",
+            "value": "{{ 7*7 }}"
+          },
+          {
+            "label": "Fixed Jinja template",
+            "value": "Hello {{ name }}"
+          },
+          {
+            "label": "Separate data",
+            "value": {
+              "name": "{{ 7*7 }}"
+            }
+          }
+        ],
+        "summary": "The input was inserted as the name value. Any {{ … }} inside it was not evaluated as template code.",
+        "scenario": "ssti",
+        "variant": "safe",
+        "request_id": "42dfaa5db9fe",
+        "source_sha256": "d4a3a607bf5cfd9ac0841acfaa45fae9e59a4710abc541e8f6506fa898c7daed",
+        "artifacts": []
+      },
+      "passed": true
+    },
+    {
+      "scenario": "xml",
+      "preset": "normal",
+      "variant": "vulnerable",
+      "input": "<note>Hello</note>",
+      "actual": {
+        "status": 200,
+        "output": "Hello",
+        "trace": [
+          {
+            "label": "XML input",
+            "value": "<note>Hello</note>"
+          },
+          {
+            "label": "Parser settings",
+            "value": "resolve_entities=True, load_dtd=True, no_network=True"
+          },
+          {
+            "label": "DOCTYPE",
+            "value": "None"
+          },
+          {
+            "label": "root.text",
+            "value": "Hello"
+          }
+        ],
+        "summary": "External entity resolution is enabled: an entity declaration can bring the sample file's contents into the response.",
+        "artifacts": [],
+        "scenario": "xml",
+        "variant": "vulnerable",
+        "request_id": "4dab8dd0dae3",
+        "source_sha256": "35e918b5cd1e5a864065969866296cd69a36a477c0eedb50add8a6492d3e2df7"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "xml",
+      "preset": "normal",
+      "variant": "safe",
+      "input": "<note>Hello</note>",
+      "actual": {
+        "status": 200,
+        "output": "Hello",
+        "trace": [
+          {
+            "label": "XML input",
+            "value": "<note>Hello</note>"
+          },
+          {
+            "label": "Parser settings",
+            "value": "resolve_entities=False, load_dtd=False, no_network=True"
+          },
+          {
+            "label": "DTD decision",
+            "value": "No DOCTYPE → accepted"
+          },
+          {
+            "label": "root.text",
+            "value": "Hello"
+          }
+        ],
+        "summary": "Normal XML was processed with external entity resolution disabled.",
+        "artifacts": [],
+        "scenario": "xml",
+        "variant": "safe",
+        "request_id": "8fc78c47f87f",
+        "source_sha256": "83bae1521b0ad354853605dd65a032177880c7031f5680284a60d19888cc288b"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "xml",
+      "preset": "exploit",
+      "variant": "vulnerable",
+      "input": "<!DOCTYPE note [\n  <!ENTITY ext SYSTEM \"file:///lab/message.txt\">\n]>\n<note>&ext;</note>",
+      "actual": {
+        "status": 200,
+        "output": "DEMO-DATA",
+        "trace": [
+          {
+            "label": "XML input",
+            "value": "<!DOCTYPE note [\n  <!ENTITY ext SYSTEM \"file:///lab/message.txt\">\n]>\n<note>&ext;</note>"
+          },
+          {
+            "label": "Parser settings",
+            "value": "resolve_entities=True, load_dtd=True, no_network=True"
+          },
+          {
+            "label": "External resource read",
+            "value": "file:///lab/message.txt → DEMO-DATA"
+          },
+          {
+            "label": "DOCTYPE",
+            "value": "<!DOCTYPE note>"
+          },
+          {
+            "label": "root.text",
+            "value": "DEMO-DATA"
+          }
+        ],
+        "summary": "External entity resolution is enabled: an entity declaration can bring the sample file's contents into the response.",
+        "artifacts": [],
+        "scenario": "xml",
+        "variant": "vulnerable",
+        "request_id": "96fddc1b4490",
+        "source_sha256": "35e918b5cd1e5a864065969866296cd69a36a477c0eedb50add8a6492d3e2df7"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "xml",
+      "preset": "exploit",
+      "variant": "safe",
+      "input": "<!DOCTYPE note [\n  <!ENTITY ext SYSTEM \"file:///lab/message.txt\">\n]>\n<note>&ext;</note>",
+      "actual": {
+        "status": 400,
+        "output": "This endpoint does not accept DTDs.",
+        "trace": [
+          {
+            "label": "XML input",
+            "value": "<!DOCTYPE note [\n  <!ENTITY ext SYSTEM \"file:///lab/message.txt\">\n]>\n<note>&ext;</note>"
+          },
+          {
+            "label": "Parser settings",
+            "value": "resolve_entities=False, load_dtd=False, no_network=True"
+          },
+          {
+            "label": "DTD decision",
+            "value": "DOCTYPE present → HTTP 400; entity not resolved."
+          }
+        ],
+        "summary": "External entities were not resolved; the document containing a DTD was rejected.",
+        "artifacts": [],
+        "scenario": "xml",
+        "variant": "safe",
+        "request_id": "8b3d0a2811e7",
+        "source_sha256": "83bae1521b0ad354853605dd65a032177880c7031f5680284a60d19888cc288b"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "nosql",
+      "preset": "normal",
+      "variant": "vulnerable",
+      "input": "{\"sku\":\"P100\"}",
+      "actual": {
+        "status": 200,
+        "output": [
+          {
+            "sku": "P100",
+            "name": "Notebook"
+          }
+        ],
+        "trace": [
+          {
+            "label": "JSON input",
+            "value": "{\"sku\":\"P100\"}"
+          },
+          {
+            "label": "sku type",
+            "value": "string"
+          },
+          {
+            "label": "sku value",
+            "value": "P100"
+          },
+          {
+            "label": "Filter sent to the model",
+            "value": {
+              "sku": "P100"
+            }
+          },
+          {
+            "label": "Result rows",
+            "value": [
+              {
+                "sku": "P100",
+                "name": "Notebook"
+              }
+            ]
+          }
+        ],
+        "summary": "sku entered the filter without a type check; $ne inside an object can change the query condition.",
+        "artifacts": [],
+        "scenario": "nosql",
+        "variant": "vulnerable",
+        "request_id": "9295ece321a9",
+        "source_sha256": "2f8b51e28d98f8022c36f97333ee5737310aede51eb8ab35392e0769c15e372e"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "nosql",
+      "preset": "normal",
+      "variant": "safe",
+      "input": "{\"sku\":\"P100\"}",
+      "actual": {
+        "status": 200,
+        "output": [
+          {
+            "sku": "P100",
+            "name": "Notebook"
+          }
+        ],
+        "trace": [
+          {
+            "label": "JSON input",
+            "value": "{\"sku\":\"P100\"}"
+          },
+          {
+            "label": "sku type",
+            "value": "string"
+          },
+          {
+            "label": "sku value",
+            "value": "P100"
+          },
+          {
+            "label": "Type decision",
+            "value": "sku is a string → accepted"
+          },
+          {
+            "label": "Filter sent to the model",
+            "value": {
+              "sku": "P100"
+            }
+          },
+          {
+            "label": "Result rows",
+            "value": [
+              {
+                "sku": "P100",
+                "name": "Notebook"
+              }
+            ]
+          }
+        ],
+        "summary": "The server built a fixed equality filter from the SKU string after checking its type.",
+        "artifacts": [],
+        "scenario": "nosql",
+        "variant": "safe",
+        "request_id": "196412f6c650",
+        "source_sha256": "f3e9c3835726b48e2c609af3b2453e5f88145835e23f2d129b1603ffc2bbfc87"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "nosql",
+      "preset": "exploit",
+      "variant": "vulnerable",
+      "input": "{\"sku\":{\"$ne\":\"\"}}",
+      "actual": {
+        "status": 200,
+        "output": [
+          {
+            "sku": "P100",
+            "name": "Notebook"
+          },
+          {
+            "sku": "P200",
+            "name": "Pen"
+          }
+        ],
+        "trace": [
+          {
+            "label": "JSON input",
+            "value": "{\"sku\":{\"$ne\":\"\"}}"
+          },
+          {
+            "label": "sku type",
+            "value": "object"
+          },
+          {
+            "label": "sku value",
+            "value": {
+              "$ne": ""
+            }
+          },
+          {
+            "label": "Filter sent to the model",
+            "value": {
+              "sku": {
+                "$ne": ""
+              }
+            }
+          },
+          {
+            "label": "Result rows",
+            "value": [
+              {
+                "sku": "P100",
+                "name": "Notebook"
+              },
+              {
+                "sku": "P200",
+                "name": "Pen"
+              }
+            ]
+          }
+        ],
+        "summary": "sku entered the filter without a type check; $ne inside an object can change the query condition.",
+        "artifacts": [],
+        "scenario": "nosql",
+        "variant": "vulnerable",
+        "request_id": "08b69e2e0548",
+        "source_sha256": "2f8b51e28d98f8022c36f97333ee5737310aede51eb8ab35392e0769c15e372e"
+      },
+      "passed": true
+    },
+    {
+      "scenario": "nosql",
+      "preset": "exploit",
+      "variant": "safe",
+      "input": "{\"sku\":{\"$ne\":\"\"}}",
+      "actual": {
+        "status": 400,
+        "output": {
+          "error": "sku must be a string."
+        },
+        "trace": [
+          {
+            "label": "JSON input",
+            "value": "{\"sku\":{\"$ne\":\"\"}}"
+          },
+          {
+            "label": "sku type",
+            "value": "object"
+          },
+          {
+            "label": "sku value",
+            "value": {
+              "$ne": ""
+            }
+          },
+          {
+            "label": "Type decision",
+            "value": "sku is not a string → HTTP 400; no filter was created."
+          }
+        ],
+        "summary": "The type check rejected the value before a query was built; the model was not run.",
+        "artifacts": [],
+        "scenario": "nosql",
+        "variant": "safe",
+        "request_id": "944e15bf7294",
+        "source_sha256": "f3e9c3835726b48e2c609af3b2453e5f88145835e23f2d129b1603ffc2bbfc87"
+      },
+      "passed": true
+    }
+  ],
+  "boundary_checks": [
+    {
+      "scenario": "sql",
+      "variant": "vulnerable",
+      "input": "'",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "scenario": "path",
+      "variant": "vulnerable",
+      "input": "../../outside.txt",
+      "status": 403,
+      "passed": true
+    },
+    {
+      "scenario": "path",
+      "variant": "safe",
+      "input": "missing.txt",
+      "status": 404,
+      "passed": true
+    },
+    {
+      "scenario": "command",
+      "variant": "vulnerable",
+      "input": "alice; whoami",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "scenario": "argument",
+      "variant": "vulnerable",
+      "input": "--output=../outside.txt",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "scenario": "ssti",
+      "variant": "vulnerable",
+      "input": "{{ range(999999999) }}",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "scenario": "xml",
+      "variant": "vulnerable",
+      "input": "<note>",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "scenario": "xml",
+      "variant": "vulnerable",
+      "input": "<!DOCTYPE note [<!ENTITY x SYSTEM \"file:///outside.txt\">]><note>&x;</note>",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "scenario": "nosql",
+      "variant": "vulnerable",
+      "input": "{\"sku\":{\"$gt\":\"\"}}",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "scenario": "nosql",
+      "variant": "safe",
+      "input": "{",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "scenario": "sql",
+      "variant": "safe",
+      "input": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "scenario": "path",
+      "variant": "safe",
+      "input": "\u0000",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "case": "missing input",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "case": "invalid input type",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "case": "cross origin",
+      "status": 403,
+      "passed": true
+    },
+    {
+      "case": "malformed origin",
+      "status": 403,
+      "passed": true
+    },
+    {
+      "case": "invalid Unicode",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "case": "SQL value serializes to strict JSON",
+      "input": "0 UNION SELECT x'41', NULL",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "case": "SQL value serializes to strict JSON",
+      "input": "0 UNION SELECT 1e999, 2",
+      "status": 200,
+      "passed": true
+    }
+  ],
+  "browser_checks": [
+    {
+      "scenario": "sql",
+      "same_input_comparison": true,
+      "source_switch_keeps_results": true,
+      "passed": true
+    },
+    {
+      "scenario": "command",
+      "same_input_comparison": true,
+      "source_switch_keeps_results": true,
+      "passed": true
+    },
+    {
+      "scenario": "argument",
+      "same_input_comparison": true,
+      "source_switch_keeps_results": true,
+      "passed": true
+    },
+    {
+      "scenario": "path",
+      "same_input_comparison": true,
+      "source_switch_keeps_results": true,
+      "passed": true
+    },
+    {
+      "scenario": "ssti",
+      "same_input_comparison": true,
+      "source_switch_keeps_results": true,
+      "passed": true
+    },
+    {
+      "scenario": "xml",
+      "same_input_comparison": true,
+      "source_switch_keeps_results": true,
+      "passed": true
+    },
+    {
+      "scenario": "nosql",
+      "same_input_comparison": true,
+      "source_switch_keeps_results": true,
+      "passed": true
+    },
+    {
+      "case": "edited input runs; old results visibly marked",
+      "passed": true
+    },
+    {
+      "case": "390px mobile viewport has no horizontal overflow",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "sql-compare.png",
+      "sha256": "c1afc7c3d677aba8d1f324958b2510956dc93a18515af89d5fd318c3ff9fed17"
+    },
+    {
+      "file": "argument-compare.png",
+      "sha256": "d9f4b139196208373e6ff1e9fc21653ec018c1b96c5002b0a8eeff6dfa62fa28"
+    },
+    {
+      "file": "mobile.png",
+      "sha256": "ef6aaca346055f790ec1e108f1961e5917a1a9e29b6b01c6b22aafae7c10d2f1"
+    }
+  ]
+}
