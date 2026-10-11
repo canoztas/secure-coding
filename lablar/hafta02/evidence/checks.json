@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-11T21:40:01.497285+00:00",
+  "generated_at_utc": "2026-10-11T21:47:17.901605+00:00",
   "environment": {
     "platform": "Windows-11-10.0.26200-SP0",
     "python": "3.12.10",
@@ -13,14 +13,14 @@
   "all_passed": true,
   "javascript_errors": [],
   "source_sha256": {
-    "app.py": "77bcc12fb143ec758bb7bc9ab8bcd7ae6ac402aabc64e716d2cf40d16d7d51d2",
+    "app.py": "0b67d727951ec91f203b2cb8cba75eec04dd7b2bf2a9b08b5568606b6ecd6fce",
     "catalog.py": "43e3800cb9d33dba8ba3df10101feb56eef5d96ca4a94127e4d59b40ddc2dae6",
     "process_scenarios.py": "ade74fc15f6e5159ece0a9ee8a68eb595c24aaa913eb750b851f5554a9c34e83",
     "scenarios.py": "222b8536de9ef00245e241a2ea3674008e778d8b5b58d079f2610262f46a1516",
     "structured_scenarios.py": "1b5098408f5b7380004759078b659bd12524c1ad88e3b93ba227f0a2bdd449e1",
     "verify.py": "2721ea69a706de065cb611705fff42f7091c78a735e35870f1a75f4b581a9763",
     "requirements.txt": "68b31000539d621e16b3261baaf1a9fb9d3e43994b6cc22ef44e0cc1009b81e5",
-    "README.md": "59760709d22bd1fd019f3e24e8876e3f81e14679a9a06d427bec44c782e85150",
+    "README.md": "4c377e287be624aed423ac6fa64f4158312d0eee9d102b6ec98160f3a2b80a91",
     "static/app.js": "34545a6ad34598df591d88613b72d661a986f6504c131eadcc151f386cbdd981",
     "static/index.html": "a6b56b76af4bc7cded839ced0af96a8d65ad8e6e3d983f4f79c2913b3ff4d6fe",
     "static/style.css": "dc404d503cf7c1d13d3e9618b7c00e43ddbad8848bc8ea07ff380f916e4b6da4",
@@ -61,7 +61,7 @@
         "summary": "SQLite selected 1 row(s). The input was interpreted as part of the SQL statement.",
         "scenario": "sql",
         "variant": "vulnerable",
-        "request_id": "e7a3f12a8d82",
+        "request_id": "986471e7a459",
         "source_sha256": "6307d849b20e7a1c79bd68309da604cc75e358923ee2bc5d6f647cc39508311e",
         "artifacts": []
       },
@@ -103,7 +103,7 @@
         "summary": "1 row(s) returned. The input is treated as a single parameter value, not a query condition.",
         "scenario": "sql",
         "variant": "safe",
-        "request_id": "2d0d00f08ebb",
+        "request_id": "b1053b5807ce",
         "source_sha256": "958cae6bd1348e9ddf1c3b54bfe6c856c3c6a8bc0ad5473bc14120a5ff20d5d8",
         "artifacts": []
       },
@@ -147,7 +147,7 @@
         "summary": "SQLite selected 2 row(s). The input was interpreted as part of the SQL statement.",
         "scenario": "sql",
         "variant": "vulnerable",
-        "request_id": "9e2ecc1e7ae0",
+        "request_id": "57389a9169e8",
         "source_sha256": "6307d849b20e7a1c79bd68309da604cc75e358923ee2bc5d6f647cc39508311e",
         "artifacts": []
       },
@@ -184,7 +184,7 @@
         "summary": "0 row(s) returned. The input is treated as a single parameter value, not a query condition.",
         "scenario": "sql",
         "variant": "safe",
-        "request_id": "8f21d6d477f4",
+        "request_id": "a70375f1d48b",
         "source_sha256": "958cae6bd1348e9ddf1c3b54bfe6c856c3c6a8bc0ad5473bc14120a5ff20d5d8",
         "artifacts": []
       },
@@ -228,7 +228,7 @@
         "artifacts": [],
         "scenario": "command",
         "variant": "vulnerable",
-        "request_id": "e43d51fc2812",
+        "request_id": "cc56e6359ad9",
         "source_sha256": "623e62c9db926c4cd13db47093c5a775e9d5cf440f5875cd91fd59d2ed4384ce"
       },
       "passed": true
@@ -267,7 +267,7 @@
         "artifacts": [],
         "scenario": "command",
         "variant": "safe",
-        "request_id": "b1fa490a4f08",
+        "request_id": "ee7003e09752",
         "source_sha256": "f1aab920defc78ec2840c2098d0920e105ae0a52e805fe45c75a79d31dc0ba9a"
       },
       "passed": true
@@ -310,7 +310,7 @@
         "artifacts": [],
         "scenario": "command",
         "variant": "vulnerable",
-        "request_id": "bd18653480b9",
+        "request_id": "7c13fef38bd2",
         "source_sha256": "623e62c9db926c4cd13db47093c5a775e9d5cf440f5875cd91fd59d2ed4384ce"
       },
       "passed": true
@@ -349,7 +349,7 @@
         "artifacts": [],
         "scenario": "command",
         "variant": "safe",
-        "request_id": "935522e84349",
+        "request_id": "355826c60c61",
         "source_sha256": "f1aab920defc78ec2840c2098d0920e105ae0a52e805fe45c75a79d31dc0ba9a"
       },
       "passed": true
@@ -365,7 +365,7 @@
         "trace": [
           {
             "label": "Actual subprocess argv",
-            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-xa7sv0nj\\\\git_eo1bd6_0\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-xa7sv0nj\\\\git_eo1bd6_0\", \"log\", \"-1\", \"--format=%s\", \"notes.txt\"]"
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-5r5hqj9n\\\\git_lj7h__n9\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-5r5hqj9n\\\\git_lj7h__n9\", \"log\", \"-1\", \"--format=%s\", \"notes.txt\"]"
           },
           {
             "label": "subprocess shell",
@@ -392,7 +392,7 @@
         "artifacts": [],
         "scenario": "argument",
         "variant": "vulnerable",
-        "request_id": "27fe581681c2",
+        "request_id": "746df287f288",
         "source_sha256": "6d0cccbb27c8a73cbabe361e67f814834f7727ac50e44186cd4e211b24d3465c"
       },
       "passed": true
@@ -408,7 +408,7 @@
         "trace": [
           {
             "label": "Actual subprocess argv",
-            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-_v6u2ltr\\\\git__mddmdqd\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-_v6u2ltr\\\\git__mddmdqd\", \"log\", \"-1\", \"--format=%s\", \"--\", \"notes.txt\"]"
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-jw3al06i\\\\git_xk4i0_0u\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-jw3al06i\\\\git_xk4i0_0u\", \"log\", \"-1\", \"--format=%s\", \"--\", \"notes.txt\"]"
           },
           {
             "label": "subprocess shell",
@@ -435,7 +435,7 @@
         "artifacts": [],
         "scenario": "argument",
         "variant": "safe",
-        "request_id": "f9dd51d37a0b",
+        "request_id": "32f8b7fa6210",
         "source_sha256": "558859837dca49a2e8e5efba8eba1b7f35ec8d86dc6ca060aa18116eaed8c2bc"
       },
       "passed": true
@@ -451,7 +451,7 @@
         "trace": [
           {
             "label": "Actual subprocess argv",
-            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-45dloqxt\\\\git_5rvocv1d\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-45dloqxt\\\\git_5rvocv1d\", \"log\", \"-1\", \"--format=%s\", \"--output=demo.txt\"]"
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-3nhyxyms\\\\git_w6f8yivr\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-3nhyxyms\\\\git_w6f8yivr\", \"log\", \"-1\", \"--format=%s\", \"--output=demo.txt\"]"
           },
           {
             "label": "subprocess shell",
@@ -483,7 +483,7 @@
         ],
         "scenario": "argument",
         "variant": "vulnerable",
-        "request_id": "5ea440056f33",
+        "request_id": "33d55db8b03f",
         "source_sha256": "6d0cccbb27c8a73cbabe361e67f814834f7727ac50e44186cd4e211b24d3465c"
       },
       "passed": true
@@ -499,7 +499,7 @@
         "trace": [
           {
             "label": "Actual subprocess argv",
-            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-f53zzluh\\\\git_w_vns_b_\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-f53zzluh\\\\git_w_vns_b_\", \"log\", \"-1\", \"--format=%s\", \"--\", \"--output=demo.txt\"]"
+            "value": "[\"C:\\\\Program Files\\\\Git\\\\cmd\\\\git.EXE\", \"--no-pager\", \"-c\", \"core.hooksPath=C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-fdq1diw6\\\\git_f_bap02z\\\\empty-hooks\", \"-c\", \"core.autocrlf=false\", \"-c\", \"commit.gpgSign=false\", \"-c\", \"tag.gpgSign=false\", \"-c\", \"log.showSignature=false\", \"-C\", \"C:\\\\Users\\\\jeustache\\\\AppData\\\\Local\\\\Temp\\\\secure-coding-web-fdq1diw6\\\\git_f_bap02z\", \"log\", \"-1\", \"--format=%s\", \"--\", \"--output=demo.txt\"]"
           },
           {
             "label": "subprocess shell",
@@ -526,7 +526,7 @@
         "artifacts": [],
         "scenario": "argument",
         "variant": "safe",
-        "request_id": "790071b4abc1",
+        "request_id": "f3cc6f766d6d",
         "source_sha256": "558859837dca49a2e8e5efba8eba1b7f35ec8d86dc6ca060aa18116eaed8c2bc"
       },
       "passed": true
@@ -560,7 +560,7 @@
         "summary": "The lesson note was read.",
         "scenario": "path",
         "variant": "vulnerable",
-        "request_id": "747c37d0bd93",
+        "request_id": "de83a04d45bb",
         "source_sha256": "cf8e107fb709e1f467bfd15a076c643990fb5b297b423d9f1b8ad5df50c01f5b",
         "artifacts": []
       },
@@ -595,7 +595,7 @@
         "summary": "The directory boundary check passed. The normal lesson note was read.",
         "scenario": "path",
         "variant": "safe",
-        "request_id": "638ca0cfb530",
+        "request_id": "d41d14d998b3",
         "source_sha256": "e9dc3f8312ee04d9a6b54d01b68c6c1d4f1e22aa96097d810d19ce74790f46b6",
         "artifacts": []
       },
@@ -630,7 +630,7 @@
         "summary": "The fictional private file outside the data directory was read.",
         "scenario": "path",
         "variant": "vulnerable",
-        "request_id": "aa980c0553a0",
+        "request_id": "f88ab13d01ad",
         "source_sha256": "cf8e107fb709e1f467bfd15a076c643990fb5b297b423d9f1b8ad5df50c01f5b",
         "artifacts": []
       },
@@ -665,7 +665,7 @@
         "summary": "The resolved path is outside the data directory. The request was rejected before reading the file.",
         "scenario": "path",
         "variant": "safe",
-        "request_id": "16efc15aab96",
+        "request_id": "6cd440bcf0fb",
         "source_sha256": "e9dc3f8312ee04d9a6b54d01b68c6c1d4f1e22aa96097d810d19ce74790f46b6",
         "artifacts": []
       },
@@ -696,7 +696,7 @@
         "summary": "Jinja compiled and rendered this text as a template. In this version, the input becomes part of the template source.",
         "scenario": "ssti",
         "variant": "vulnerable",
-        "request_id": "5c7782def433",
+        "request_id": "9723c3c94d7c",
         "source_sha256": "2caded8348739a9352cd7a4fe65461caf1103c36d3d777648c876094d2dd68b8",
         "artifacts": []
       },
@@ -729,7 +729,7 @@
         "summary": "The input was inserted as the name value. Any {{ … }} inside it was not evaluated as template code.",
         "scenario": "ssti",
         "variant": "safe",
-        "request_id": "58c106d54603",
+        "request_id": "de6bed3a3ddf",
         "source_sha256": "d4a3a607bf5cfd9ac0841acfaa45fae9e59a4710abc541e8f6506fa898c7daed",
         "artifacts": []
       },
@@ -760,7 +760,7 @@
         "summary": "Jinja compiled and rendered this text as a template. In this version, the input becomes part of the template source.",
         "scenario": "ssti",
         "variant": "vulnerable",
-        "request_id": "dd88557442c9",
+        "request_id": "1dafd922a951",
         "source_sha256": "2caded8348739a9352cd7a4fe65461caf1103c36d3d777648c876094d2dd68b8",
         "artifacts": []
       },
@@ -793,7 +793,7 @@
         "summary": "The input was inserted as the name value. Any {{ … }} inside it was not evaluated as template code.",
         "scenario": "ssti",
         "variant": "safe",
-        "request_id": "42dfaa5db9fe",
+        "request_id": "b60cd15e8d2c",
         "source_sha256": "d4a3a607bf5cfd9ac0841acfaa45fae9e59a4710abc541e8f6506fa898c7daed",
         "artifacts": []
       },
@@ -829,7 +829,7 @@
         "artifacts": [],
         "scenario": "xml",
         "variant": "vulnerable",
-        "request_id": "4dab8dd0dae3",
+        "request_id": "0b419eeea83d",
         "source_sha256": "35e918b5cd1e5a864065969866296cd69a36a477c0eedb50add8a6492d3e2df7"
       },
       "passed": true
@@ -864,7 +864,7 @@
         "artifacts": [],
         "scenario": "xml",
         "variant": "safe",
-        "request_id": "8fc78c47f87f",
+        "request_id": "c9e191a1a604",
         "source_sha256": "83bae1521b0ad354853605dd65a032177880c7031f5680284a60d19888cc288b"
       },
       "passed": true
@@ -903,7 +903,7 @@
         "artifacts": [],
         "scenario": "xml",
         "variant": "vulnerable",
-        "request_id": "96fddc1b4490",
+        "request_id": "1f9f1801be2d",
         "source_sha256": "35e918b5cd1e5a864065969866296cd69a36a477c0eedb50add8a6492d3e2df7"
       },
       "passed": true
@@ -934,7 +934,7 @@
         "artifacts": [],
         "scenario": "xml",
         "variant": "safe",
-        "request_id": "8b3d0a2811e7",
+        "request_id": "eec4ae15b7ff",
         "source_sha256": "83bae1521b0ad354853605dd65a032177880c7031f5680284a60d19888cc288b"
       },
       "passed": true
@@ -985,7 +985,7 @@
         "artifacts": [],
         "scenario": "nosql",
         "variant": "vulnerable",
-        "request_id": "9295ece321a9",
+        "request_id": "8062c72026bc",
         "source_sha256": "2f8b51e28d98f8022c36f97333ee5737310aede51eb8ab35392e0769c15e372e"
       },
       "passed": true
@@ -1040,7 +1040,7 @@
         "artifacts": [],
         "scenario": "nosql",
         "variant": "safe",
-        "request_id": "196412f6c650",
+        "request_id": "818e03617173",
         "source_sha256": "f3e9c3835726b48e2c609af3b2453e5f88145835e23f2d129b1603ffc2bbfc87"
       },
       "passed": true
@@ -1103,7 +1103,7 @@
         "artifacts": [],
         "scenario": "nosql",
         "variant": "vulnerable",
-        "request_id": "08b69e2e0548",
+        "request_id": "50a680c0b9e0",
         "source_sha256": "2f8b51e28d98f8022c36f97333ee5737310aede51eb8ab35392e0769c15e372e"
       },
       "passed": true
@@ -1142,7 +1142,7 @@
         "artifacts": [],
         "scenario": "nosql",
         "variant": "safe",
-        "request_id": "944e15bf7294",
+        "request_id": "95d431c9f33b",
         "source_sha256": "f3e9c3835726b48e2c609af3b2453e5f88145835e23f2d129b1603ffc2bbfc87"
       },
       "passed": true
@@ -1326,11 +1326,11 @@
   "screenshots": [
     {
       "file": "sql-compare.png",
-      "sha256": "c1afc7c3d677aba8d1f324958b2510956dc93a18515af89d5fd318c3ff9fed17"
+      "sha256": "5e4d09b0a1c8111a5525ed075725b59d729f2d1beeb0968fa65dd5aefdb39d4c"
     },
     {
       "file": "argument-compare.png",
-      "sha256": "d9f4b139196208373e6ff1e9fc21653ec018c1b96c5002b0a8eeff6dfa62fa28"
+      "sha256": "f3a870a54cd37e08c9584d8bc27dd82b5a9cab0de513340ffc1ce1f25d083153"
     },
     {
       "file": "mobile.png",

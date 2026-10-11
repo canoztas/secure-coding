@@ -1,7 +1,7 @@
 """Ders 4 lab çözümleri. Yalnız 127.0.0.1'deki sentetik labı okur.
 
-python lab/hafta04/cozum.py 1
-python lab/hafta04/cozum.py 2
+python lablar/hafta04/cozum.py 1
+python lablar/hafta04/cozum.py 2
 Düzeltilmiş sürüm için aynı komutlara --port 8085 ekleyin.
 """
 import argparse

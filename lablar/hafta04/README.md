@@ -7,17 +7,17 @@ Derste **yalnız tarayıcıdaki düğmelere basarak** iki örneği göstereceği
 Python 3.10+ kullanın. Depo kökünde bir kez kurun:
 
 ```powershell
-python -m pip install -r lab/hafta04/requirements.txt
+python -m pip install -r lablar/hafta04/requirements.txt
 ```
 
 İlk terminalde hatalı sürümü, ikinci terminalde düzeltilmiş sürümü başlatın:
 
 ```powershell
-python -X utf8 lab/hafta04/lab.py
+python -X utf8 lablar/hafta04/lab.py
 ```
 
 ```powershell
-python -X utf8 lab/hafta04/lab.py --fixed --port 8085
+python -X utf8 lablar/hafta04/lab.py --fixed --port 8085
 ```
 
 [Hatalı sürüm](http://127.0.0.1:8084) · [Düzeltilmiş sürüm](http://127.0.0.1:8085). Güncel Edge veya Chrome ile açın. İki terminal açık kalsın; derste yalnız tarayıcı kullanılacak. Sunucuyu durdurmak için Ctrl+C.
@@ -71,16 +71,16 @@ Tarayıcı çözümü [lab.js](lab.js) içindeki hazır Web Crypto işlemleriyle
 Aynı örneklerin bağımsız Python çözümü [cozum.py](cozum.py) dosyasındadır:
 
 ```powershell
-python lab/hafta04/cozum.py 1
-python lab/hafta04/cozum.py 2
-python lab/hafta04/cozum.py 1 --port 8085
-python lab/hafta04/cozum.py 2 --port 8085
+python lablar/hafta04/cozum.py 1
+python lablar/hafta04/cozum.py 2
+python lablar/hafta04/cozum.py 1 --port 8085
+python lablar/hafta04/cozum.py 2 --port 8085
 ```
 
 ## Slaytlardaki küçük örnekler
 
 ```powershell
-python -X utf8 lab/hafta04/demo.py
+python -X utf8 lablar/hafta04/demo.py
 ```
 
 44 kontrol: küçük sayılarla Diffie–Hellman, tahmin edilebilir reset token'ı, Sezar, RSA-OAEP, X25519 + HKDF + AES-GCM, PRNG, Base64, hash, HMAC, nonce tekrarı, Ed25519 ve scrypt. Örnek kişiler Alice ve Bob'dur. Scrypt örneği yaklaşık 128 MiB bellek kullanır.

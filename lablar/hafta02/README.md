@@ -5,8 +5,8 @@ Edit the input, send a real HTTP request, and inspect the running Python code an
 Start from the repository root:
 
 ```powershell
-python -m pip install -r lab/hafta02/requirements.txt
-python -X utf8 lab/hafta02/app.py
+python -m pip install -r lablar/hafta02/requirements.txt
+python -X utf8 lablar/hafta02/app.py
 ```
 
 Open **http://127.0.0.1:5023**. Use `--port 5024` to change the port. Stop the server with `Ctrl+C` in the terminal. Command and argument examples require Git on PATH; Windows uses the POSIX tools bundled with Git for Windows. No internet connection or separate database service is needed to run the app.
@@ -59,7 +59,7 @@ Verification also requires Playwright and Microsoft Edge:
 
 ```powershell
 python -m pip install playwright
-python -X utf8 lab/hafta02/verify.py
+python -X utf8 lablar/hafta02/verify.py
 ```
 
 Verification starts and stops its own temporary server without affecting the classroom server. It writes `evidence/checks.json`. It does not commit, push, or publish anything.

@@ -1,6 +1,6 @@
 """Yerel kriptografi dersi: yalnızca sentetik veri, ağ/dosya erişimi yok.
 
-python -X utf8 lab/hafta04/demo.py --json varliklar/hafta04/lab-dogrulama.json
+python -X utf8 lablar/hafta04/demo.py --json varliklar/hafta04/lab-dogrulama.json
 """
 from __future__ import annotations
 

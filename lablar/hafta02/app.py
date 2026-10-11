@@ -1,4 +1,4 @@
-"""Interactive lesson 2 lab. Run: python -X utf8 lab/hafta02/app.py"""
+"""Interactive lesson 2 lab. Run: python -X utf8 lablar/hafta02/app.py"""
 
 from __future__ import annotations
 

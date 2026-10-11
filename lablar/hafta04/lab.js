@@ -119,7 +119,7 @@ function setupSolution() {
   byId("solution-fix").textContent = lab === 1
     ? "Düzeltme: AES key'ini yeterli uzunlukta güvenli rastgele baytlardan üret. İnsan parolası kullanılacaksa uygun parola KDF'si gerekir."
     : "Düzeltme: hata yanıtına key veya uygulama ayarlarını ekleme. Daha önce sızmış key'i yenile ve etkilenen veriyi değerlendir.";
-  byId("solution-command").textContent = `python lab/hafta04/cozum.py ${lab}` + (location.port !== "8084" ? ` --port ${location.port}` : "");
+  byId("solution-command").textContent = `python lablar/hafta04/cozum.py ${lab}` + (location.port !== "8084" ? ` --port ${location.port}` : "");
   byId("compare").href = `http://127.0.0.1:${fixed ? 8084 : 8085}/lab/${lab}`;
   byId("compare").textContent = fixed ? "Hatalı sürümde aynı adımları göster →" : "Düzeltilmiş sürümde aynı adımları göster →";
   byId("source-code").addEventListener("toggle", async () => {
