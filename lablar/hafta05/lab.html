@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="tr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Parola lab · Ders 5</title><link rel="stylesheet" href="/lab.css"><script src="/lab.js" defer></script></head>
+<body data-lab="{{LAB}}" data-fixed="{{FIXED}}"><main>
+<nav><a href="/">DERS 5 / PAROLA LAB</a><span>{{MODE}} · Yerel, sentetik veriler</span></nav>
+<section id="home" hidden>
+<p class="eyebrow">ORNEK.TEST · GİRİŞ SAYFASI</p><h1>Parolaya üç yoldan saldıralım.</h1>
+<p class="intro">Aynı şirketin giriş sayfası, eski forum yedeği ve parola kontrol servisi. Her labı hazır düğmelerle adım adım göstereceğiz; sonunda açıklamalı çözüm ve düzeltilmiş sürüm var.</p>
+<div class="choices">
+<a class="choice" href="/lab/1"><span>01 / ONLINE</span><h2>Kilit var, yine de girdik</h2><p>Hata mesajları → tek hesaba brute force → password spraying → çözüm.</p><b>Lab 1'i göster →</b></a>
+<a class="choice" href="/lab/2"><span>02 / OFFLINE</span><h2>Sızan forum yedeği</h2><p>Yedeği incele → sözlük + kurallar → kırmayı başlat → çözüm.</p><b>Lab 2'yi göster →</b></a>
+<a class="choice" href="/lab/3"><span>03 / SIZINTI KONTROLÜ</span><h2>Parolayı göndermeden sor</h2><p>Parolayı seç → sunucuya sor → sunucu ne gördü? → çözüm.</p><b>Lab 3'ü göster →</b></a>
+</div>
+<p class="sim-link"><a href="/simulasyon">Parola kırma simülatörü →</a> <span>Hash, kırma süresi, canlı brute force, sızan veritabanı, spraying ve credential stuffing; sunucuya parola gönderilmez.</span></p>
+</section>
+<section id="exercise" hidden>
+<p class="eyebrow" id="label"></p><h1 id="title"></h1><p class="intro" id="task"></p>
+<ol class="step-list" id="step-list" aria-label="Gösterim adımları"></ol>
+<div id="steps"></div>
+<p><button id="restart" class="secondary" type="button" hidden>Baştan göster ↺</button></p>
+<p id="page-error" role="alert" hidden></p>
+</section>
+</main></body></html>

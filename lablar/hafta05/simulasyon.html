@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parola Kırma Simülatörü · Ders 5</title>
+<link rel="stylesheet" href="/simulasyon.css">
+<script src="/simulasyon-md5.js" defer></script>
+<script src="/simulasyon.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Güvenli Kodlama · Hafta 5 · <a class="back" href="/">Lab ana sayfası</a></p>
+      <h1>Parola Kırma Simülatörü</h1>
+    </div>
+    <p class="lede">Bütün hesaplar tarayıcıda yapılır, girilen parola hiçbir yere gönderilmez. Kullanıcılar ve parolalar Lab 5'teki sentetik verilerdir.</p>
+  </header>
+
+  <nav role="tablist" aria-label="Simülasyon bölümleri">
+    <button role="tab" id="t-hash" aria-controls="hash" aria-selected="true"><span class="n">1</span>Hash</button>
+    <button role="tab" id="t-sure" aria-controls="sure" aria-selected="false"><span class="n">2</span>Kırma süresi</button>
+    <button role="tab" id="t-canli" aria-controls="canli" aria-selected="false"><span class="n">3</span>Canlı brute force</button>
+    <button role="tab" id="t-sizinti" aria-controls="sizinti" aria-selected="false"><span class="n">4</span>Sızan veritabanı</button>
+    <button role="tab" id="t-online" aria-controls="online" aria-selected="false"><span class="n">5</span>Giriş sayfasına saldırı</button>
+  </nav>
+
+  <!-- 1 · HASH -->
+  <section role="tabpanel" id="hash" aria-labelledby="t-hash">
+    <h2>Parola nasıl saklanır?</h2>
+    <p class="intro">Sunucu parolayı değil, parolanın hash'ini saklar. Bir karakteri değiştirin: hash tamamen değişir. Ama aynı parola her zaman aynı hash'i verir; salt eklenmedikçe.</p>
+    <div class="panel">
+      <label for="hash-in">Parola</label>
+      <input type="text" id="hash-in" value="Sonbahar2026!" autocomplete="off" spellcheck="false">
+      <div class="u1 row">
+        <button class="chip" data-hash-preset="Sonbahar2026!">Sonbahar2026!</button>
+        <button class="chip" data-hash-preset="Sonbahar2026?">Sonbahar2026?</button>
+        <button class="chip" data-hash-preset="123456">123456</button>
+      </div>
+    </div>
+    <div class="panel">
+      <dl class="kv">
+        <dt>MD5 · salt'sız</dt><dd><div class="hash" id="h-md5"></div><span class="note">1 × RTX 5090: saniyede 219,5 milyar deneme</span></dd>
+        <dt>SHA-1 · salt'sız</dt><dd><div class="hash" id="h-sha1"></div><span class="note">Have I Been Pwned bu özetin ilk 5 karakteriyle sorgulanır</span></dd>
+        <dt>SHA-256 · salt'sız</dt><dd><div class="hash" id="h-sha256"></div><span class="note">1 × RTX 5090: saniyede 27,7 milyar deneme</span></dd>
+        <dt>PBKDF2-SHA256 · 600.000 tur · salt'lı</dt><dd><div class="hash" id="h-pbkdf2">hesaplanıyor…</div><span class="note" id="h-pbkdf2-ms"></span></dd>
+      </dl>
+    </div>
+    <div class="panel">
+      <h3>İki kullanıcı aynı parolayı seçti</h3>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Kullanıcı</th><th>Parola</th><th>SHA-256 (salt'sız)</th><th>Salt</th><th>PBKDF2 (salt'lı)</th></tr></thead>
+          <tbody id="twin-body"></tbody>
+        </table>
+      </div>
+      <div class="u2 row">
+        <button class="btn alt" id="twin-salt">Yeni salt üret</button>
+        <p class="note">Salt'sız hash'ler aynı: sızıntıda iki kullanıcının aynı parolayı kullandığı görünür ve tek denemede ikisi birden kırılır. Salt her kayıtta farklıdır, gizli değildir.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · SÜRE -->
+  <section role="tabpanel" id="sure" aria-labelledby="t-sure" hidden>
+    <h2>Bu parola ne kadar dayanır?</h2>
+    <p class="intro">Süre ≈ aday sayısı ÷ saniyedeki deneme. Kör brute force bütün kombinasyonları dener; gerçek saldırgan önce yaygın parolaları, sözlük kelimelerini ve şablonları dener.</p>
+    <div class="panel">
+      <label for="sure-in">Parola</label>
+      <input type="text" id="sure-in" value="Sonbahar2026!" autocomplete="off" spellcheck="false">
+      <div class="u1 row" id="sure-presets"></div>
+    </div>
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Kör brute force</h3>
+        <p class="big" id="sure-brute-n"></p>
+        <p class="note" id="sure-brute-why"></p>
+      </div>
+      <div class="panel">
+        <h3>Akıllı saldırgan</h3>
+        <p class="big" id="sure-smart-n"></p>
+        <p class="note" id="sure-smart-why"></p>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Süre · logaritmik ölçek</h3>
+      <div class="u3 legend"><span><i class="sw"></i>akıllı saldırgan (en kötü durum)</span><span><i class="sw ghost-sw"></i>kör brute force</span></div>
+      <div class="scale" id="sure-scale"></div>
+      <div class="ticks" id="sure-ticks" aria-hidden="true"></div>
+    </div>
+    <div class="panel">
+      <h3>Saldırganın denediği modeller</h3>
+      <div class="scroll"><table id="sure-table"></table></div>
+      <p class="u1 note">Süreler tam taramanın en kötü durumudur; ortalama yaklaşık yarısıdır. Online satırı hesap kilidi olmayan bir giriş sayfasını varsayar. NIST SP 800-63B-4 hesap başına en fazla 100 ardışık hatalı denemeye izin verir.</p>
+    </div>
+  </section>
+
+  <!-- 3 · CANLI -->
+  <section role="tabpanel" id="canli" aria-labelledby="t-canli" hidden>
+    <h2>Canlı brute force: bu bilgisayar vs. GPU</h2>
+    <p class="intro">Hedef parolanın MD5 hash'ini alıyoruz ve bütün adayları sırayla deniyoruz. Tarayıcı tek çekirdekte çalışır; aynı işi bir RTX 5090'ın ne kadar sürede bitireceği yanında hesaplanır.</p>
+    <div class="grid-side">
+      <div class="panel">
+        <label for="bf-set">Karakter kümesi</label>
+        <select id="bf-set">
+          <option value="0123456789">Rakam (10)</option>
+          <option value="abcdefghijklmnopqrstuvwxyz" selected>Küçük harf (26)</option>
+          <option value="abcdefghijklmnopqrstuvwxyz0123456789">Küçük harf + rakam (36)</option>
+        </select>
+        <label for="bf-in" class="u2">Hedef parola</label>
+        <input type="text" id="bf-in" value="kedi" maxlength="7" autocomplete="off" spellcheck="false">
+        <div class="u1 row" id="bf-presets"></div>
+        <p class="u4 note" id="bf-err"></p>
+        <div class="u2 row">
+          <button class="btn" id="bf-start">Kırmaya başla</button>
+          <button class="btn alt" id="bf-stop" disabled>Durdur</button>
+        </div>
+        <p class="u2 note">Hedef hash: <span class="mono" id="bf-target"></span></p>
+      </div>
+      <div class="u5 panel">
+        <div class="odometer" id="bf-cur" aria-live="off">—</div>
+        <progress id="bf-prog" max="1" value="0"></progress>
+        <div class="stats">
+          <div class="stat"><span>Denenen</span><strong id="bf-tried">0</strong></div>
+          <div class="stat"><span>Toplam aday</span><strong id="bf-total">0</strong></div>
+          <div class="stat"><span>Bu tarayıcı</span><strong id="bf-rate">—</strong></div>
+          <div class="stat"><span>Geçen süre</span><strong id="bf-time">0 sn</strong></div>
+        </div>
+        <p class="callout" id="bf-status" aria-live="polite">Bir hedef seçin ve başlatın.</p>
+        <div class="scroll"><table id="bf-compare"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · SIZINTI -->
+  <section role="tabpanel" id="sizinti" aria-labelledby="t-sizinti" hidden>
+    <h2>Eski forumun yedeği sızdı: salt'sız SHA-256</h2>
+    <p class="intro">24 kayıtlık sentetik forum yedeği. Saldırgan sözlükteki kelimelere kural uygular (büyük harf, sona yıl, ünlem) ve her adayı bir kez hash'ler. Salt olmadığı için tek hash bütün tabloyla karşılaştırılır.</p>
+    <div class="grid-side">
+      <div class="u6 panel">
+        <div class="stats">
+          <div class="stat"><span>Denenen aday</span><strong id="fz-tried">0</strong></div>
+          <div class="stat"><span>Kırılan kayıt</span><strong id="fz-cracked">0 / 24</strong></div>
+          <div class="stat"><span>Süre</span><strong id="fz-time">0 sn</strong></div>
+        </div>
+        <div class="row">
+          <button class="btn" id="fz-start">Sözlük saldırısını başlat</button>
+          <button class="btn alt" id="fz-reset">Sıfırla</button>
+        </div>
+        <div class="u7 odometer" id="fz-cur">—</div>
+        <div class="callout" id="fz-salted">
+          <p><strong>Aynı tablo salt'lı PBKDF2 (600.000 tur) ile saklansaydı</strong></p>
+          <p class="u8 note" id="fz-salted-text">Ölçüm için saldırıyı başlatın.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Kullanıcı</th><th>SHA-256</th><th>Sonuç</th></tr></thead>
+            <tbody id="fz-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · ONLINE -->
+  <section role="tabpanel" id="online" aria-labelledby="t-online" hidden>
+    <h2>Giriş sayfasına saldırı: ornek.test</h2>
+    <p class="intro">Her deneme bir HTTP isteğidir. Saldırı türünü seçin, savunmaları açıp kapatın ve sonucu karşılaştırın. Saldırgan saniyede 1 istek gönderir.</p>
+    <div class="grid-side">
+      <div class="u9 panel">
+        <div>
+          <h3>Saldırı</h3>
+          <div class="seg" id="on-mode">
+            <button data-mode="brute" aria-pressed="true">Brute force</button>
+            <button data-mode="spray" aria-pressed="false">Password spraying</button>
+            <button data-mode="stuff" aria-pressed="false">Credential stuffing</button>
+          </div>
+          <p class="u1 note" id="on-mode-desc"></p>
+        </div>
+        <div>
+          <h3>Savunma</h3>
+          <div class="toggles">
+            <label class="toggle"><input type="checkbox" id="d-lock"><span>Hesap kilidi<small>Aynı hesapta 5 hatalı denemede kilitle</small></span></label>
+            <label class="toggle"><input type="checkbox" id="d-alarm"><span>Toplam hata alarmı<small>Bütün hesaplarda 12 hatalı denemede saldırıyı engelle</small></span></label>
+            <label class="toggle"><input type="checkbox" id="d-block"><span>Kayıtta sızmış / yaygın parola kontrolü<small>Sonbahar2026! veya sızan bir parola baştan kabul edilmez</small></span></label>
+            <label class="toggle"><input type="checkbox" id="d-mfa"><span>MFA<small>Doğru parolanın ardından ikinci adım istenir</small></span></label>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn" id="on-run">Başlat</button>
+          <button class="btn alt" id="on-step">Tek adım</button>
+          <button class="btn alt" id="on-reset">Sıfırla</button>
+        </div>
+        <div>
+          <label for="on-speed">Animasyon hızı</label>
+          <input type="range" id="on-speed" min="60" max="900" value="420" class="u10">
+        </div>
+      </div>
+      <div class="u11">
+        <div class="stats">
+          <div class="stat"><span>İstek</span><strong id="on-req">0</strong></div>
+          <div class="stat"><span>Ele geçen hesap</span><strong id="on-open" class="u12">0</strong></div>
+          <div class="stat"><span>MFA'da duran</span><strong id="on-mfa" class="u13">0</strong></div>
+          <div class="stat"><span>Kilitlenen hesap</span><strong id="on-lock" class="u14">0</strong></div>
+          <div class="stat"><span>Saldırı süresi</span><strong id="on-clock">0 sn</strong></div>
+        </div>
+        <p class="callout" id="on-summary" aria-live="polite"></p>
+        <div class="grid-2">
+          <div class="u15 panel">
+            <h3>Hesaplar</h3>
+            <div id="on-accts"></div>
+            <div class="u16 legend"><span><i class="u17 sw"></i>hatalı</span><span><i class="u18 sw"></i>giriş</span><span><i class="u19 sw"></i>MFA durdurdu</span><span><i class="u20 sw"></i>kilitli</span></div>
+          </div>
+          <div class="u21">
+            <h3>İstek kaydı</h3>
+            <div class="log" id="on-log" aria-live="off"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Hızlar: Specops Software, “Is a $30,000 GPU Good at Password Cracking?”, Nisan 2026 (MD5, SHA-256; 1 × RTX 5090) · Hive Systems, “Are your passwords in the green”, Temmuz 2026 (bcrypt cost 10; 16 × RTX 5090). İkisi de üretici raporu; hakemli değil.</span>
+    <span>Yaygın parola sıraları NCSC 2019 listesinden esinlenen sentetik sayılardır. Kırma süreleri hesaptır, ölçülmüş saldırı değildir.</span>
+  </footer>
+</div>
+</body>
+</html>

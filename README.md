@@ -15,6 +15,7 @@ Bu repo ders sunumlarını, uygulama örneklerini ve dönem projesi yönergesini
 | 2 | SQL injection, command injection ve path traversal; ek konular | [HTML](slaytlar/hafta02.html) · [PDF](slaytlar/hafta02.pdf) |
 | 3 | HTTP ve durum kodları; cookie, session, XSS ve savunmaları | [HTML](slaytlar/hafta03.html) · [PDF](slaytlar/hafta03.pdf) |
 | 4 | Neden şifreleriz? Tarihçe, simetrik/asimetrik, Diffie–Hellman, TLS, RNG/nonce, brute force hızları (2026), rainbow table ve salt | [HTML](slaytlar/hafta04.html) · [PDF](slaytlar/hafta04.pdf) |
+| 5 | Authentication: Hafta 1–4 tekrarı, terimleri ve her haftadan gerçek vakalar; parola saldırıları (brute force, sözlük, credential stuffing, password spraying), sızan parolalar, NIST 2025 parola politikası, Argon2id ve MFA; 12 gerçek vaka (kaynak ekran görüntüleriyle) ve terimler | [HTML](slaytlar/hafta05.html) · [PDF](slaytlar/hafta05.pdf) |
 
 ## Lablar
 
