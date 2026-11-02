@@ -2,3 +2,9 @@ instance/
 .venv/
 __pycache__/
 .pytest_cache/
+COZUMLER.md
+lab-writeup.html
+lab-writeup.pdf
+writeup.html
+writeup_uret.py
+requirements-docs.txt

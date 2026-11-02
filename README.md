@@ -17,7 +17,7 @@ Bu repo ders sunumlarını, uygulama örneklerini ve dönem projesi yönergesini
 | 4 | Neden şifreleriz? Tarihçe, simetrik/asimetrik, Diffie–Hellman, TLS, RNG/nonce, brute force hızları (2026), rainbow table ve salt | [HTML](slaytlar/hafta04.html) · [PDF](slaytlar/hafta04.pdf) |
 | 5 | Authentication: Hafta 1–4 tekrarı, terimleri ve her haftadan gerçek vakalar; parola saldırıları (brute force, sözlük, credential stuffing, password spraying), sızan parolalar, NIST 2025 parola politikası, Argon2id ve MFA; 12 gerçek vaka (kaynak ekran görüntüleriyle) ve terimler | [HTML](slaytlar/hafta05.html) · [PDF](slaytlar/hafta05.pdf) |
 | 6 | Yetkilendirme: IDOR/BOLA/BFLA/BOPLA, şirket ve alan erişimleri, RBAC/ABAC/ReBAC kodları, UUID örneği, gerçek vakalar ve etkileşimli erişim denemesi | [HTML](slaytlar/hafta06.html) · [PDF](slaytlar/hafta06.pdf) |
-| 7 | JWT’de simetrik/asimetrik doğrulama ve istemcide saklama; OAuth ve SSO; log toplama, ayrıştırma, grafik ve anomali tespitine giriş; dosya yükleme güvenliği; zafiyet türü–etki ayrımı, bağımsız RCE kapanışı ve Log4Shell örneği · 35 slayt | [HTML](slaytlar/hafta07.html) · [PDF](slaytlar/hafta07.pdf) |
+| 7 | JWT’de simetrik/asimetrik doğrulama ve istemcide saklama; OAuth ve SSO; log toplama, ayrıştırma, grafik ve anomali tespitine giriş; dosya yükleme güvenliği; zafiyet türü–etki ayrımı, bağımsız RCE kapanışı ve Log4Shell örneği | [HTML](slaytlar/hafta07.html) · [PDF](slaytlar/hafta07.pdf) |
 
 ## Lablar
 
@@ -25,15 +25,15 @@ Bu repo ders sunumlarını, uygulama örneklerini ve dönem projesi yönergesini
 
 ## İlk 7 hafta: cheat sheet
 
-Her haftaya bir sayfa ayıran **7 sayfalık cheat sheet**; kavramların Türkçe ve İngilizce karşılıklarını, kısaltmaların açılımlarını ve kısa kod örneklerini toplar. SQLi/LFI, STRIDE ve HTTP çizimlerine ek olarak 6. sayfada tek fatura vakası; 7. sayfada JWT, kurumsal giriş, log işleme ve RCE akışları bulunur. Dosya yükleme, bir görsel eki örneğiyle; RCE, uygulama yetkileri ve Log4Shell örneğiyle açıklanır. Çizimler PDF’de yerel vektörler, Overleaf’te TikZ olarak yer alır.
+Her haftaya bir sayfa ayıran **7 sayfalık cheat sheet**; kavramların Türkçe ve İngilizce karşılıklarını, kısaltmaların açılımlarını ve kısa kod örneklerini toplar. SQLi/LFI, STRIDE ve HTTP çizimlerine ek olarak 6. sayfada tek fatura vakası; 7. sayfada JWT, kurumsal giriş, log işleme ve RCE akışları bulunur. Dosya yükleme, bir görsel eki örneğiyle; RCE, uygulama yetkileri ve Log4Shell örneğiyle açıklanır. Çizimler PDF’de yerel vektörler olarak yer alır.
 
-[PDF](ozetler/hafta01-07-cheat-sheet.pdf) · [HTML](ozetler/hafta01-07-cheat-sheet.html) · [LaTeX](ozetler/hafta01-07-cheat-sheet.tex) · [Overleaf paketi](ozetler/hafta01-07-overleaf.zip)
+[PDF](ozetler/hafta01-07-cheat-sheet.pdf)
 
-Overleaf’te derleyici **XeLaTeX**, ana dosya **main.tex** seçilir. `python ozetler/uret.py --pdf` notu ve proje paketini yeniden üretir. 7. hafta sunumunun kaynağı [araclar/hafta07_uret.py](araclar/hafta07_uret.py) dosyasındadır; sunum `python araclar/hafta07_uret.py` ile üretilir.
+7. hafta sunumunun kaynağı [araclar/hafta07_uret.py](araclar/hafta07_uret.py) dosyasındadır; sunum `python araclar/hafta07_uret.py` ile üretilir.
 
 ## Mini lab uygulaması
 
-[Fatura Masası](mini-lab/README.md), fatura ve sipariş akışlarında sekiz kısa çalışma içerir: SQL enjeksiyonu, kayıt ve alan izinleri, kalıcı XSS, istemci fiyatı, kupon tekrarı, ödeme adımını atlama ve JWT payload değiştirme. Her çalışma zafiyetli ve düzeltilmiş sürümde denenebilir; çalışan kod görünümü, istek masası, etki takibi ve sıfırlama bulunur. JWT doğrudan web ekranında düzenlenebilir; jwt_tool çıktısı da yapıştırılabilir. Python/Flask ile yerelde çalışır. Eğitmen write-up'ı: [Markdown](mini-lab/COZUMLER.md) · [PDF](mini-lab/lab-writeup.pdf) · [HTML](mini-lab/lab-writeup.html).
+[Fatura Masası](mini-lab/README.md), fatura ve sipariş akışlarında sekiz kısa çalışma içerir: SQL enjeksiyonu, kayıt ve alan izinleri, kalıcı XSS, istemci fiyatı, kupon tekrarı, ödeme adımını atlama ve JWT payload değiştirme. Her çalışma zafiyetli ve düzeltilmiş sürümde denenebilir; çalışan kod görünümü, istek masası, etki takibi ve sıfırlama bulunur. JWT doğrudan web ekranında düzenlenebilir; jwt_tool çıktısı da yapıştırılabilir. Python/Flask ile yerelde çalışır. [Write-up (PDF)](mini-lab/writeup.pdf).
 
 ## Dönem projesi
 

@@ -55,19 +55,9 @@ python jwt_tool.py "$labJwt" -T
 
 Aracın ürettiği değiştirilmiş token’ı uygulamadaki **Token** alanına yapıştırıp **Token’ı çöz** ve **Faturaları bu token’la getir** düğmelerini kullanın. Bu akış için jwt_tool zorunlu değildir; aynı değişiklik doğrudan web ekranında yapılabilir.
 
-## Eğitmen ve kontrol
+## Write-up ve kontroller
 
-[Eğitmen write-up'ı](COZUMLER.md), sekiz labın adım adım çözümünü, beklenen HTTP yanıtlarını, kök nedenlerini, teknik/iş etkilerini ve düzeltme sonrası kontrolleri içerir. [PDF](lab-writeup.pdf) ve [HTML](lab-writeup.html) sürümleri de vardır. Öğrenciye ilk aşamada uygulamadaki görevleri vermek yeterlidir.
-
-Write-up çıktılarını yeniden üretmek için:
-
-```powershell
-python -m pip install -r mini-lab/requirements-docs.txt
-python -m playwright install chromium
-python mini-lab/writeup_uret.py --pdf
-```
-
-Bu komutlar repo kökünden çalıştırılır; belge araçları uygulamayı kullanmak için gerekli değildir.
+[Write-up (PDF)](writeup.pdf), sekiz labın adım adım çözümünü, beklenen HTTP yanıtlarını, kök nedenlerini, teknik/iş etkilerini ve düzeltme sonrası kontrolleri içerir.
 
 ```powershell
 python -m unittest discover -s mini-lab -p test_app.py -v
