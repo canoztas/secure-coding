@@ -1,0 +1,323 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'"><title>Fatura Masası · Sekiz labın çözümü</title><style>
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#eceee8;color:#242b26;font:16px/1.65 Georgia,'Times New Roman',serif}
+    main{max-width:900px;margin:30px auto;background:#fffefa;padding:55px 65px}h1{font-size:35px;line-height:1.2;font-weight:500;margin:0 0 14px}h2{font-size:26px;line-height:1.3;margin:50px 0 20px;border-top:1px solid #8fa08e;padding-top:20px}h3{font-size:18px;line-height:1.4;margin:25px 0 10px}p{margin:12px 0}a{color:#285b42;text-decoration:underline;text-underline-offset:3px}code{font: .85em/1.6 Consolas,'Liberation Mono',monospace}pre{background:#f0f3eb;border-left:3px solid #9aaa91;padding:14px 17px;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}pre code{font:inherit}table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.5;margin:20px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #d6ddd1;padding:9px 10px}th{border-top:1px solid #87957e;background:#f1f3ed;font-weight:600}li{margin:7px 0}strong{font-weight:600}
+    @media(max-width:700px){main{margin:0;padding:28px 20px}h1{font-size:29px}h2{font-size:23px}table{font-size:11px}td,th{padding:7px 5px}pre{font-size:11px}}
+    @page{size:A4;margin:18mm 18mm 21mm}
+    @media print{html{scroll-behavior:auto}body{background:white;font-size:10.2pt;line-height:1.45}main{max-width:none;margin:0;padding:0;background:white}h1{font-size:25pt}h2{break-before:page;font-size:19pt;margin:0 0 12pt;padding-top:0;border-top:0}h3{font-size:11.5pt;margin:15pt 0 6pt;break-after:avoid}p{margin:6pt 0;orphans:3;widows:3}pre{font-size:8.2pt;line-height:1.45;padding:8pt 10pt;break-inside:avoid;print-color-adjust:exact}table{font-size:8pt;line-height:1.35;margin:10pt 0}th,td{padding:5pt 6pt}tr{break-inside:avoid}thead{display:table-header-group}h1,h2,h3{break-after:avoid}li{margin:4pt 0}a{color:#242b26;text-decoration:none}.intro p{margin:5pt 0}.intro h3{margin:10pt 0 5pt}.intro table{font-size:7.7pt;line-height:1.3;margin:7pt 0}.intro td,.intro th{padding:3pt 4pt}.intro pre{padding:6pt 8pt;margin:6pt 0}}
+
+@media print{.intro{font-size:10pt;line-height:1.4}}</style></head><body><main><div class="intro"><h1>Fatura Masası lab write-up</h1>
+<p>Sekiz labın çözümü ve ders anlatım notları</p>
+<p>Her labda önce normal işlemi yapıyor, ardından bir HTTP isteğini değiştirerek iş kuralını sınıyoruz. Son adım, aynı denemeyi düzeltilmiş sürümde tekrarlamak ve normal işlevin çalışmaya devam ettiğini doğrulamak.</p>
+<p>Anlatım boyunca üç soruyu ayır: <strong>Hata nerede? Hangi koşulda kullanılabiliyor? Sonuçta ne oluyor?</strong> SQL enjeksiyonu veya eksik nesne yetkilendirmesi hatanın türünü; izinsiz kayıt okuma, rol yükseltme veya kod çalıştırma teknik etkiyi anlatır. Fatura bilgilerinin sızması ve eksik tahsilat ise iş etkisidir.</p>
+<h3>Başlangıç</h3>
+<p>Repo kökünden uygulamayı çalıştır:</p>
+<pre><code class="language-powershell">python -m pip install -r mini-lab/requirements.txt
+python mini-lab/app.py
+</code></pre>
+<p>Tarayıcıda <code>http://127.0.0.1:5050</code> adresini aç. Ders hesabı olarak <strong>Alice</strong>, sürüm olarak <strong>Zafiyetli sürüm</strong> seçili olsun. Temiz bir gösterim için başlangıçta <strong>Verileri sıfırla</strong> düğmesini kullan. Bu işlem iki sürümün verilerini ve bütün lab ilerlemesini temizler.</p>
+<p>İstek örnekleri uygulamadaki <strong>İstek masası</strong> üzerinden gönderilir. Tarayıcı, çalışma alanını belirleyen oturum çerezini kendisi taşır. Harici bir HTTP istemcisi kullanırsan aynı çerezi de taşımalısın; başka tarayıcı oturumu ayrı veri ve JWT anahtarı kullanır.</p>
+<p><strong>İlgili kod</strong> paneli, çalışan <code>app.py</code> dosyasındaki satırları gösterir. Sürüm değiştirildiğinde vurgulanan koşul dalları değişir. Kaynak kodun tamamında, iki sürümün ortak doğrulamalarını da görebilirsin.</p>
+<h3>Hesaplar ve kayıtlar</h3>
+<table>
+<thead>
+<tr>
+<th>Hesap</th>
+<th>Şirket ve rol</th>
+<th>Normal erişim</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alice</td>
+<td>A şirketi, üye</td>
+<td>Kendi 101 ve 104 numaralı faturaları</td>
+</tr>
+<tr>
+<td>Bob</td>
+<td>A şirketi, üye</td>
+<td>Kendi 102 numaralı faturası</td>
+</tr>
+<tr>
+<td>Deniz</td>
+<td>A şirketi, muhasebeci</td>
+<td>A şirketinin 101, 102 ve 104 numaralı faturaları</td>
+</tr>
+<tr>
+<td>Ece</td>
+<td>B şirketi, üye</td>
+<td>Kendi 103 numaralı faturası</td>
+</tr>
+</tbody>
+</table>
+<p>Hesap seçicisi farklı izinleri göstermek içindir; gerçek bir giriş mekanizması değildir. Kupon sepeti, ürün siparişi ve 501 numaralı ödeme örneği birbirinden bağımsızdır. İlerleme işaretleri gözlenen etkiyi takip eder; sınav notu olarak kullanılmaz.</p>
+<h3>Hızlı başvuru</h3>
+<table>
+<thead>
+<tr>
+<th>Lab</th>
+<th>Deneme</th>
+<th>Düzeltilmiş davranış</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#lab-1">1 · Arama</a></td>
+<td>Aramayla kapsam dışı faturaları getir</td>
+<td>Aynı metin sorguyu değiştirmez; sonuç boş</td>
+</tr>
+<tr>
+<td><a href="#lab-2">2 · Fatura erişimi</a></td>
+<td>Alice ile 102 numaralı kaydı aç</td>
+<td><code>403 Forbidden</code></td>
+</tr>
+<tr>
+<td><a href="#lab-3">3 · Alan izinleri</a></td>
+<td>Not isteğine <code>status</code> ekle</td>
+<td><code>403</code>; hiçbir alan değişmez</td>
+</tr>
+<tr>
+<td><a href="#lab-4">4 · Teslimat notu</a></td>
+<td>Notta JavaScript çalıştır</td>
+<td>Girdi metin olarak görünür</td>
+</tr>
+<tr>
+<td><a href="#lab-5">5 · Ürün fiyatı</a></td>
+<td>900 TL'lik ürüne 1 TL gönder</td>
+<td><code>201</code>; tutar sunucuda 900 TL hesaplanır</td>
+</tr>
+<tr>
+<td><a href="#lab-6">6 · Kupon</a></td>
+<td>Aynı indirimi ikinci kez uygula</td>
+<td><code>409</code>; toplam 800 TL kalır</td>
+</tr>
+<tr>
+<td><a href="#lab-7">7 · Ödeme akışı</a></td>
+<td>Ödemeden teslimat onayı iste</td>
+<td><code>409 payment_required</code></td>
+</tr>
+<tr>
+<td><a href="#lab-8">8 · JWT</a></td>
+<td>Token'ın kullanıcı/rol alanını değiştir</td>
+<td>Aynı token için <code>401 invalid_token</code></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id="lab-1">1. Arama üzerinden SQL enjeksiyonu</h2>
+<h3>Normal akış ve deneme</h3>
+<p><strong>Arama</strong> çalışmasını aç. <code>ofis</code> araması Alice'in 104 numaralı faturasını döndürür. Boş aramada yalnız 101 ve 104 görünür. Beklenen kural, arama sonuçlarının kullanıcının izinleriyle sınırlı kalmasıdır.</p>
+<p>Arama kutusuna şu değeri yaz:</p>
+<pre><code class="language-text">%' OR 1=1 --
+</code></pre>
+<p><strong>Ara</strong> düğmesine bas. Yanıtta <code>count: 4</code> ve 101, 102, 103, 104 numaralı kayıtlar görünür. Bob'un 102 numaralı faturası ve B şirketinin 103 numaralı faturası artık Alice'e dönmektedir. İstek masasında aynı denemenin URL kodlanmış biçimi şöyledir:</p>
+<pre><code class="language-http">GET /api/vulnerable/invoices/search?q=%25%27%20OR%201%3D1%20--%20
+</code></pre>
+<h3>Kök neden</h3>
+<p>Zafiyet türü <strong>SQL injection / SQL enjeksiyonu</strong>. Arama girdisi sorguya parametre olarak verilmek yerine SQL metnine ekleniyor:</p>
+<pre><code class="language-python">sql = f&quot;SELECT * FROM invoices WHERE {scope} AND title LIKE '%{query}%' ORDER BY id&quot;
+</code></pre>
+<p>Girdideki tek tırnak metin değerini kapatır. <code>OR 1=1</code> koşulu sorguya yeni bir mantıksal dal ekler; <code>--</code> kalan kısmı yorum yapar. Koşulun ilgili bölümü şuna dönüşür:</p>
+<pre><code class="language-sql">WHERE company = ? AND owner_id = ? AND title LIKE '%%'
+OR 1=1 -- %' ORDER BY id
+</code></pre>
+<p><code>AND</code>, <code>OR</code> işleminden önce değerlendirilir. Böylece önceki izin koşullarını sağlamayan satırlar da <code>OR 1=1</code> nedeniyle seçilebilir. Şirket ve kullanıcı değerlerinin parametre olması, sorgunun başka bir parçasındaki metin birleştirme hatasını ortadan kaldırmaz.</p>
+<h3>Düzeltmeyi doğrulama</h3>
+<p><strong>Düzeltilmiş sürüm</strong> seç; düzenlenen istek korunur. Aynı isteği gönder. Yanıt <code>200</code> olur, fakat <code>count: 0</code> döner. Bu beklenen sonuçtur: saldırı metni artık aranacak açıklama değeridir.</p>
+<pre><code class="language-python">sql = f&quot;SELECT * FROM invoices WHERE {scope} AND title LIKE ? ORDER BY id&quot;
+params.append(&quot;%&quot; + query + &quot;%&quot;)
+</code></pre>
+<p>Son olarak <code>ofis</code> aramasını yeniden dene; 104 numaralı kayıt bulunmalıdır.</p>
+<p><strong>Tür → etki:</strong> Metin birleştirmeyle SQL enjeksiyonu → izin kapsamını aşan kayıt okuma → finansal bilgilerin ifşası. Bu labda sorgu, her istekte oluşturulan ayrı bir bellek veritabanında çalışır; ana uygulama deposuna erişim veya sunucuda kod çalıştırma gösterilmez.</p>
+<p><strong>Derste sor:</strong> “Sonuç sayısının artması tek başına kanıt mı?” Beklenen cevap, sonuçlarda Alice'in erişememesi gereken kayıtların gösterilmesidir.</p>
+<h2 id="lab-2">2. Fatura kimliğini değiştirerek izinsiz erişim</h2>
+<h3>Normal akış ve deneme</h3>
+<p><strong>Fatura erişimi</strong> çalışmasında Alice'in 101 numaralı faturasını aç. Ardından numarayı <code>102</code> yap:</p>
+<pre><code class="language-http">GET /api/vulnerable/invoices/102
+</code></pre>
+<p>Yanıt <code>200</code> olur. Yanıtın ilgili alanları:</p>
+<pre><code class="language-json">{
+  &quot;invoice&quot;: {
+    &quot;id&quot;: 102,
+    &quot;owner_id&quot;: &quot;bob&quot;,
+    &quot;company&quot;: &quot;A&quot;
+  }
+}
+</code></pre>
+<p>İstek başarılı olmasına rağmen ders hesabı hâlâ Alice'tir. Kayıt Bob'a aittir. Aynı şirkette bulunmak, üyeler arasında otomatik okuma yetkisi oluşturmaz.</p>
+<h3>Kök neden</h3>
+<p>Burada <strong>IDOR / Insecure Direct Object Reference (Güvensiz Doğrudan Nesne Referansı)</strong>, kimliğin değiştirilerek izinsiz nesneye ulaşılmasını tarif eder. API bakımından eksik kontrol <strong>BOLA / Broken Object Level Authorization (Nesne Düzeyinde Yetkilendirme Eksikliği)</strong> olarak ele alınır.</p>
+<p>Sunucu faturayı kimlikle buluyor, fakat zafiyetli GET yolunda <code>can_read</code> sonucunu erişimi engellemek için kullanmıyor. Listede yalnız Alice'in faturalarını göstermek, doğrudan ayrıntı adresini korumaz.</p>
+<h3>Düzeltmeyi doğrulama</h3>
+<p>Aynı 102 isteğini düzeltilmiş sürüme gönder:</p>
+<pre><code class="language-http">GET /api/fixed/invoices/102
+</code></pre>
+<p>Beklenen yanıt <code>403</code> ve <code>error: forbidden</code>. Kendi 101 numaralı faturası hâlâ <code>200</code> dönmelidir. Ek karşılaştırma için Deniz hesabını seç: muhasebeci 102'yi okuyabilir, B şirketine ait 103'ü okuyamaz.</p>
+<pre><code class="language-python">return (
+    invoice[&quot;company&quot;] == user[&quot;company&quot;]
+    and (invoice[&quot;owner_id&quot;] == user[&quot;id&quot;]
+         or user[&quot;role&quot;] == &quot;accountant&quot;)
+)
+</code></pre>
+<p>Bu kontrol her ayrıntı isteğinde uygulanır. Kimlik sayı yerine UUID olsa da kullanıcının bu kaydı okuyup okuyamayacağı yine denetlenmelidir.</p>
+<p><strong>Tür → etki:</strong> Eksik nesne yetkilendirmesi → başka kullanıcının faturasını okuma → finansal gizliliğin ihlali. Bu örnekte veri değiştirme gösterilmez; PATCH yolunun ayrıca izin kontrolü vardır.</p>
+<p><strong>Derste sor:</strong> “102 yerine tahmin edilemeyen bir kimlik kullansaydık sorun çözülür müydü?” Beklenen cevap, tahmin zorluğunun izin kontrolünün yerine geçmediğidir.</p>
+<h2 id="lab-3">3. Not güncellemesiyle fatura onaylama</h2>
+<h3>Normal akış ve deneme</h3>
+<p>Alice'in 101 numaralı faturası başlangıçta <code>draft</code> durumundadır. <strong>Alan izinleri</strong> ekranından yalnız teslimat notunu güncelle; normal PATCH isteğini incele. Sonra aynı gövdeye <code>status</code> ekle:</p>
+<pre><code class="language-http">PATCH /api/vulnerable/invoices/101
+Content-Type: application/json
+
+{&quot;note&quot;:&quot;Yarın teslim&quot;,&quot;status&quot;:&quot;approved&quot;}
+</code></pre>
+<p>Yanıt <code>200</code> olur ve <code>invoice.status</code> artık <code>approved</code> görünür. Alice yalnız üye olmasına rağmen fatura onaylanmıştır.</p>
+<h3>Kök neden</h3>
+<p>Zafiyet <strong>BOPLA / Broken Object Property Level Authorization (Nesne Alanı Düzeyinde Yetkilendirme Eksikliği)</strong> kapsamındadır. Toplu alan atamada izin verilen alanlar listesi fazla geniştir:</p>
+<pre><code class="language-python">allowed = {&quot;note&quot;, &quot;status&quot;} if mode == &quot;vulnerable&quot; else {&quot;note&quot;}
+invoice.update({k: v for k, v in payload.items() if k in allowed})
+</code></pre>
+<p>Alice'in nesneye erişimi vardır; fatura gerçekten kendisine aittir. Hata, aynı erişimin bütün alanları değiştirme yetkisi gibi değerlendirilmesidir. <code>status</code> güncellemesi, not düzenleme işleminden farklı bir iş yetkisi gerektirir.</p>
+<h3>Düzeltmeyi doğrulama</h3>
+<p>İki alanı içeren gövdeyi düzeltilmiş sürüme gönder. Yanıt <code>403 field_forbidden</code> olmalı. Ardından 101'i tekrar oku: durum <code>draft</code>, not ise başlangıç değerinde kalmalıdır. Reddedilen istek kısmen uygulanmaz.</p>
+<p>Yalnız şu gövdeyi gönderdiğinde <code>200</code> alınmalıdır:</p>
+<pre><code class="language-json">{&quot;note&quot;:&quot;Yarın teslim&quot;}
+</code></pre>
+<p>Düzeltme, bu işlemde yalnız <code>note</code> alanına izin verir. Gerçek bir onay işlemi ayrıca rolü, şirket kapsamını, tutar limitini ve mevcut durumu doğrulamalıdır; bu uygulamada ayrı bir fatura onay servisi gösterilmez.</p>
+<p><strong>Tür → etki:</strong> Fazla geniş alan izni → onay durumunun yetkisiz değiştirilmesi → muhasebe onay sürecinin aşılması.</p>
+<p><strong>Derste sor:</strong> “Fatura kendisinin olduğuna göre hangi izin eksik?” Beklenen cevap, nesne izni ile alan/işlem izninin ayrı olduğudur.</p>
+<h2 id="lab-4">4. Teslimat notunda kalıcı XSS</h2>
+<h3>Normal akış ve deneme</h3>
+<p><strong>Teslimat notu</strong> ekranında sıradan bir metin kaydet. Ardından aşağıdaki girdiyi not alanına yazıp yeniden kaydet:</p>
+<pre><code class="language-html">&lt;img src=x onerror=&quot;alert('Not içindeki kod çalıştı')&quot;&gt;
+</code></pre>
+<p>Sunucuya giden isteğin biçimi:</p>
+<pre><code class="language-http">POST /api/vulnerable/notes
+Content-Type: application/json
+
+{&quot;note&quot;:&quot;&lt;img src=x onerror=\&quot;alert('Not içindeki kod çalıştı')\&quot;&gt;&quot;}
+</code></pre>
+<p>Not önizlemesinde “Çalışan kodun mesajı: Not içindeki kod çalıştı” görünür. Labın <code>alert</code> işlevi bu mesajı önizlemeye yazar; ayrı bir tarayıcı iletişim kutusu açmaz. Aynı çalışmayı yeniden açmak, saklanan notun tekrar işlendiğini gösterir.</p>
+<h3>Kök neden</h3>
+<p>Zafiyet <strong>stored XSS / stored cross-site scripting (Kalıcı Siteler Arası Betik Çalıştırma)</strong>. Kaydedilen kullanıcı verisi HTML çıktısına kaçış uygulanmadan eklenir:</p>
+<pre><code class="language-python">rendered = note if mode == &quot;vulnerable&quot; else str(escape(note))
+</code></pre>
+<p>Tarayıcı <code>&lt;img&gt;</code> öğesini HTML olarak işler. Görsel yüklenemeyince <code>onerror</code> çalışır. Önizlemede ağ erişiminin CSP ile engellenmesi, hata olayının oluşmasını engellemez; olay işleyicisi JavaScript çalıştırır.</p>
+<h3>Düzeltmeyi doğrulama</h3>
+<p>Düzeltilmiş sürümde aynı notu ayrıca kaydet; sürümlerin notları ayrıdır. Bu kez girdi metin olarak görünmeli, “Çalışan kodun mesajı” oluşmamalıdır. Normal bir metin notu kaydedip tekrar açarak işlevin korunduğunu da göster.</p>
+<p>Bu çıktı bağlamı için düzeltme HTML kaçışıdır. Ürün gerçekten zengin metin kabul edecekse, izin verilen HTML öğelerini uygulayan güvenilir bir temizleme politikası ayrıca tasarlanır.</p>
+<p><strong>Tür → etki:</strong> Güvensiz HTML çıktısı → tarayıcıda JavaScript çalışması → görüntülenen içeriğin veya kullanıcı işlemlerinin etkilenmesi. Buradaki önizleme sandbox içinde çalışır ve ağ erişimi kapalıdır. Gösterilen kanıt notun kaydedilip önizlemede çalışmasıdır; başka kullanıcının oturumunun ele geçirildiği veya sunucuda RCE elde edildiği sonucuna varılmaz.</p>
+<p><strong>Derste sor:</strong> “Notu veritabanına yazmış olmak XSS kanıtı mı?” Beklenen cevap, kaydetme ile tarayıcıda kod çalışmasının farklı aşamalar olduğudur.</p>
+<h2 id="lab-5">5. İstemci fiyatıyla ucuz sipariş oluşturma</h2>
+<h3>Normal akış ve deneme</h3>
+<p><strong>Ürün fiyatı</strong> ekranında USB-C çoklayıcı için bir sipariş oluştur. Katalog fiyatı 900 TL; normal istekte <code>unit_price_cents</code> değeri <code>90000</code> görünür. Tutarlar API'de tam sayı kuruştur.</p>
+<p>Birim fiyatı <code>100</code> yaparak yeniden gönder:</p>
+<pre><code class="language-http">POST /api/vulnerable/orders
+Content-Type: application/json
+
+{&quot;product_id&quot;:&quot;hub&quot;,&quot;quantity&quot;:1,&quot;unit_price_cents&quot;:100}
+</code></pre>
+<p>Yanıt <code>201 Created</code> olur. Siparişte <code>unit_price_cents: 100</code> ve <code>total_cents: 100</code> döner: 900 TL'lik ürün 1 TL'ye sipariş edilmiştir.</p>
+<h3>Kök neden</h3>
+<p>Bu bir <strong>business logic flaw / iş mantığı hatası</strong>. Sunucu, maliyet hesabının yetkili kaynağı olarak istemciden gelen fiyatı kullanır:</p>
+<pre><code class="language-python">unit = payload.get(&quot;unit_price_cents&quot;, product[&quot;price_cents&quot;])
+</code></pre>
+<p>Bir alanın formda düzenlenememesi veya JavaScript ile sabitlenmesi HTTP isteğini korumaz. İstek masası, tarayıcının ağ araçları veya bir proxy ile alan değiştirilebilir. Bu hatayı göstermek için SQL ya da JavaScript kodu enjekte etmek gerekmez.</p>
+<h3>Düzeltmeyi doğrulama</h3>
+<p>Aynı 100 kuruşluk gövdeyi düzeltilmiş sürüme gönder. Yanıt yine <code>201</code> olmalıdır; bu kez <code>unit_price_cents: 90000</code> ve <code>total_cents: 90000</code> döner. Başarı ölçütü isteğin reddedilmesi değil, fiyatın doğru kaynaktan hesaplanmasıdır.</p>
+<pre><code class="language-python">unit = product[&quot;price_cents&quot;]
+</code></pre>
+<p>Adedi <code>2</code> yaparsan düzeltilmiş sürüm toplamı <code>180000</code> kuruş hesaplar. Adet her iki sürümde de 1–10 arası tam sayı olmalıdır; negatif adet bu labın zafiyeti değildir.</p>
+<p><strong>Tür → etki:</strong> İstemci fiyatına güvenme → sipariş tutarının manipülasyonu → gerçek bir ticari akışta eksik tahsilat. Labda gösterilen sonuç sipariş kaydının tutarıdır; gerçek bir ödeme hareketi yapılmaz.</p>
+<p><strong>Derste sor:</strong> “İki sürüm de 201 döndürüyorsa düzeltmeyi nasıl anlayacağız?” Beklenen cevap, durum koduna ek olarak sunucunun hesapladığı tutarı karşılaştırmaktır.</p>
+<h2 id="lab-6">6. Tek kullanımlık kuponun tekrarlanması</h2>
+<h3>Normal akış ve deneme</h3>
+<p><strong>İndirim kuponu</strong> ekranındaki bağımsız sepet 1000 TL ile başlar. <code>MERHABA20</code>, kullanıcı başına bir kez %20 indirim sağlamalıdır. Kuponu normal düğmeyle uygula: tutar 800 TL olur ve düğme kapanır.</p>
+<p>İstek masasında aynı POST isteğini tekrar gönder:</p>
+<pre><code class="language-http">POST /api/vulnerable/coupons/apply
+Content-Type: application/json
+
+{&quot;code&quot;:&quot;MERHABA20&quot;}
+</code></pre>
+<p>İkinci yanıt da <code>200</code> olur. <code>total_cents</code> değeri <code>64000</code>, yani sepet tutarı 640 TL'dir. Yeni indirim ilk tutara değil, mevcut 800 TL'ye uygulanmıştır.</p>
+<h3>Kök neden</h3>
+<p>Hata, <strong>tek kullanım kuralının sunucuda uygulanmaması</strong>. Zafiyetli sürüm kullanım bilgisini kaydeder, fakat indirimden önce bu bilgiyi engelleyici koşul olarak kullanmaz. Arayüzde düğmenin kapanması yalnız kullanıcı deneyimidir.</p>
+<pre><code class="language-python">used = uid in coupon[&quot;used_by&quot;]
+if mode == &quot;fixed&quot; and used:
+    raise LabError(&quot;Bu kuponu daha önce kullandınız.&quot;, 409, &quot;already_used&quot;)
+coupon[&quot;totals&quot;][uid] = coupon[&quot;totals&quot;][uid] * 80 // 100
+</code></pre>
+<p>Bu gösterim aynı isteğin sırayla tekrarlanmasıdır. Eş zamanlı iki isteğe ihtiyaç yoktur; bulguyu yarış koşulu diye adlandırmak gerekmez.</p>
+<h3>Düzeltmeyi doğrulama</h3>
+<p>Düzeltilmiş sürümün temiz sepetine ilk uygulama <code>200</code>, ikinci uygulama <code>409 already_used</code> dönmelidir. Sepet 800 TL'de kalır. Bob hesabına geçip ilk kullanımı denersen kabul edilmelidir; kural bütün kullanıcılar için tek kullanım değil, kullanıcı başına tek kullanımdır.</p>
+<p>Sunucuda kullanım kontrolü, tutar güncellemesi ve kullanım kaydı aynı veritabanı işlemi içinde yapılır. Gerçek bir sistemde kullanıcı/kampanya anahtarının benzersizliği ve eş zamanlı işlemlerin davranışı da korunmalıdır.</p>
+<p><strong>Tür → etki:</strong> Kampanya kuralının eksik uygulanması → aynı indirimin tekrar alınması → gelir kaybı ve kampanya maliyetinin artması.</p>
+<p><strong>Derste sor:</strong> “Buton kapalıysa istek nasıl gitti?” Beklenen cevap, arayüz kısıtının doğrudan API çağrısını engellemediğidir.</p>
+<h2 id="lab-7">7. Ödeme adımını atlayarak teslimat onayı</h2>
+<h3>Normal akış ve deneme</h3>
+<p><strong>Ödeme akışı</strong> ekranında Alice'in 501 numaralı siparişi başlangıçta <code>payment_status: unpaid</code>, <code>status: awaiting_payment</code> durumundadır. Normal sıra şöyledir:</p>
+<pre><code class="language-text">Sipariş → Ödeme doğrulandı → Teslimat onayı
+</code></pre>
+<p>Ödeme düğmesine basmadan, istek masasındaki onay isteğini gönder:</p>
+<pre><code class="language-http">POST /api/vulnerable/orders/501/confirm
+Content-Type: application/json
+
+{}
+</code></pre>
+<p>Yanıt <code>200</code> olur. Aynı kayıtta iki alanı birlikte göster:</p>
+<pre><code class="language-json">{&quot;payment_status&quot;:&quot;unpaid&quot;,&quot;status&quot;:&quot;confirmed&quot;}
+</code></pre>
+<p>Bu çelişki kanıttır: siparişin teslimat onayı vardır, ödeme kaydı yoktur.</p>
+<h3>Kök neden</h3>
+<p>Zafiyet <strong>workflow bypass / iş akışı adımını atlama</strong>. Kullanıcı siparişin sahibi olduğu için nesne erişimi uygundur. Eksik olan, onay durumuna geçişin ön koşuludur. Arayüzün onay düğmesini kapatması sunucunun durum makinesini korumaz.</p>
+<h3>Düzeltmeyi doğrulama</h3>
+<p>Aynı isteği düzeltilmiş sürüme gönder: <code>409 payment_required</code> dönmelidir. Sonra normal sırayı tamamla:</p>
+<pre><code class="language-http">POST /api/fixed/orders/501/pay
+Content-Type: application/json
+
+{}
+</code></pre>
+<p>Ödeme kaydından sonra <code>/api/fixed/orders/501/confirm</code> çağrısı <code>200</code> dönmelidir. Kayıt artık <code>paid</code> ve <code>confirmed</code> değerlerini birlikte taşır. Tekrar onay isteği <code>409</code> ile reddedilir. Bob'un bu siparişi onaylaması da sahiplik kontrolü nedeniyle <code>403</code> alır.</p>
+<p>Labın <strong>Deneme ödemesi yap</strong> işlemi gerçek bir ödeme sağlayıcısını temsil eden bir simülasyondur. Üretimde ödeme doğrulaması, istemcinin “ödedim” beyanından değil, güvenilir sunucu tarafı ödeme kaydından gelmelidir.</p>
+<p><strong>Tür → etki:</strong> Eksik durum geçişi kontrolü → ödemesiz teslimat onayı → gerçek bir süreçte tahsilatsız mal/hizmet teslimi.</p>
+<p><strong>Derste sor:</strong> “Bu kayıt Alice'in olduğu hâlde neden işlem reddedilmeli?” Beklenen cevap, sahipliğin iş akışındaki ön koşulları kaldırmadığıdır.</p>
+<h2 id="lab-8">8. JWT payload değiştirerek kimliğe bürünme</h2>
+<h3>Normal token ve değiştirme</h3>
+<p>Alice hesabıyla <strong>JWT ile kimlik</strong> çalışmasını aç. <strong>Yeni ders token’ı al</strong>, ardından <strong>Faturaları bu token’la getir</strong> düğmesine bas. <code>200</code> yanıtında 101 ve 104 numaralı faturalar görünür.</p>
+<p>JWT, <code>header.payload.signature</code> biçiminde üç parçadır. Header'da <code>alg: HS256</code> görülür. Payload'daki <code>sub</code> kullanıcıyı, <code>role</code> rolü, <code>company</code> şirketi belirtir. <code>iss</code>, <code>aud</code>, <code>iat</code>, <code>exp</code> alanları sırasıyla üretici, hedef, üretim zamanı ve bitiş zamanıyla ilgilidir.</p>
+<p>Payload editöründe yalnız <code>sub</code> değerini <code>alice</code> yerine <code>bob</code> yap; diğer alanları koru. <strong>Payload’u token’a yaz</strong> düğmesine bas. İlk parça ve imza korunurken ortadaki parça değişir. Yeni bir imza üretilmemiştir.</p>
+<pre><code class="language-http">GET /api/vulnerable/jwt/invoices
+Authorization: Bearer &lt;DEGISTIRILMIS_DERS_TOKENI&gt;
+</code></pre>
+<p><strong>Faturaları bu token’la getir</strong> düğmesine basınca <code>200</code> alınır. Sunucunun kabul ettiği kimlik Bob, dönen fatura 102'dir. Üstteki ders hesabının Alice olarak kaldığını göster: değişen bilgi hesap seçicisi değil, token'daki iddiadır.</p>
+<h3>Kök neden</h3>
+<p>Zafiyet, <strong>JWT imza doğrulamasının yapılmaması</strong>. Zafiyetli dal token'ı yalnız çözer:</p>
+<pre><code class="language-python">claims = jwt.decode(token, options={&quot;verify_signature&quot;: False})
+</code></pre>
+<p>Base64url ile kodlanmış JSON'u okumak, bu verinin güvenilir üreticiden geldiğini kanıtlamaz. Sunucu doğrulanmamış <code>sub</code>, <code>role</code> ve <code>company</code> değerlerini erişim kararında kullanınca saldırgan kendi kimliğini veya yetkisini belirleyebilir.</p>
+<h3>Aynı token ile düzeltme kontrolü</h3>
+<p>Değiştirilmiş token'ı koruyarak <strong>Düzeltilmiş sürüm</strong> seç ve tekrar gönder. Yanıt <code>401 invalid_token</code> olmalıdır. Bu aşamada yeni token almak, karşılaştırılan girdiyi değiştirir; önce aynı token'ın reddini göster.</p>
+<pre><code class="language-python">claims = jwt.decode(
+    token, key, algorithms=[&quot;HS256&quot;],
+    issuer=&quot;fatura-masasi&quot;, audience=&quot;fatura-api&quot;,
+    options={&quot;require&quot;: [&quot;sub&quot;, &quot;role&quot;, &quot;company&quot;, &quot;iss&quot;, &quot;aud&quot;, &quot;exp&quot;, &quot;iat&quot;]},
+)
+</code></pre>
+<p>Ardından yeni bir orijinal Alice token'ı alıp düzeltilmiş sürümde gönder: normal işlem <code>200</code> dönmelidir. Token'lar 15 dakika geçerlidir. Uzun süren bir gösterimde başlangıç token'ını yenilemek, süre dolmasını imza değişikliğiyle karıştırmayı önler.</p>
+<p>İkinci deneme olarak orijinal Alice token'ında yalnız <code>role</code> değerini <code>accountant</code> yap. Zafiyetli sürüm 101, 102 ve 104'ü getirir; düzeltilmiş sürüm yine <code>401</code> döndürür. Bu, kullanıcı değiştirmeden rol yükseltmenin aynı eksik doğrulamadan doğduğunu gösterir.</p>
+<h3>jwt_tool ile aynı deneme</h3>
+<p>Aracı kurduysan uygulamadan ders token'ını kopyalayıp terminalde çözebilir ve değiştirebilirsin:</p>
+<pre><code class="language-powershell">$labJwt = 'UYGULAMADAN_KOPYALANAN_DERS_TOKENI'
+python jwt_tool.py &quot;$labJwt&quot;
+python jwt_tool.py &quot;$labJwt&quot; -T
+</code></pre>
+<p>Çıktıdaki değiştirilmiş token'ı web ekranındaki <strong>Token</strong> alanına yapıştır. <strong>Token’ı çöz</strong>, ardından <strong>Faturaları bu token’la getir</strong> düğmesini kullan. Terminaldeki çözümleme tek başına bulgu değildir; kanıt, sunucunun değiştirilmiş token ile izinsiz faturayı döndürmesidir. Araç kurulumu için <a href="https://github.com/ticarpi/jwt_tool">jwt_tool deposu</a> ve <a href="README.md#jwt-denemesi">uygulama notu</a> kullanılabilir.</p>
+<p><strong>Tür → etki:</strong> Eksik kriptografik doğrulama → kimliğe bürünme veya rol yükseltme → izinsiz finansal veri erişimi. Anahtar tarayıcıya verilmez; bu lab anahtar kırmayı göstermez. Anahtar çalışma alanına özeldir; aynı karşılaştırmayı aynı tarayıcı oturumunda yap. Sıfırlama anahtarı değiştirir ve eski token düzeltilmiş sürümde geçersiz olur.</p>
+<p><strong>Derste sor:</strong> “Payload'u geri değiştirirsek token yeniden geçerli olur mu?” Orijinal imzalanan baytlar birebir geri gelirse olabilir; JSON alan sırası ve kodlama da imzanın girdisidir. Temiz karşılaştırma için yeni orijinal token almak daha anlaşılırdır.</p>
+<h2 id="kapanis">Eğitmen için kapanış notları</h2>
+<p>Her labın sonunda öğrenciden kısa bir bulgu anlatımı iste: <strong>değiştirdiği istek, gördüğü kanıt, eksik kontrol ve aynı denemenin düzeltme sonrası sonucu</strong>. Durum kodunu tek başına başarı ölçütü sayma. Arama ve fiyat örneklerinde düzeltilmiş sürüm de başarılı HTTP yanıtı verir; önemli olan kapsam ve tutardır.</p>
+<p>Karıştırılabilecek üç ayrımı özellikle sor:</p>
+<ul>
+<li>Nesneye erişebilmek, nesnenin bütün alanlarını değiştirebilmek değildir.</li>
+<li>Kimlik ve rol doğrulaması, fiyat/kupon/ödeme gibi iş kurallarını kendiliğinden sağlamaz.</li>
+<li>Kod çalışmasının nerede olduğu önemlidir: XSS tarayıcı bağlamını, RCE hedef uygulamanın çalıştığı sistemdeki kod yürütme etkisini anlatır. Bu labların SQLi veya JWT sonucundan doğrudan RCE sonucu çıkarılmaz.</li>
+</ul>
+<p>İş etkisini kanıttan ayrı kur: labda 1 TL'lik sipariş kaydı oluşması gözlenen teknik sonuçtur; gerçek bir ödeme ve teslimat sisteminde bunun eksik tahsilata dönüşmesi, ilgili entegrasyonların da aynı tutara güvenmesine bağlıdır.</p>
+<p>Kaynak uygulama <a href="app.py">app.py</a>, görüntülenen kod parçaları <a href="code_views.py">code_views.py</a>, davranış kontrolleri <a href="test_app.py">test_app.py</a> dosyalarındadır. Write-up HTML ve PDF çıktıları <code>python mini-lab/writeup_uret.py --pdf</code> ile yeniden üretilebilir.</p></main></body></html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fatura Masası · Güvenlik atölyesi</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/code.css">
+  <link rel="stylesheet" href="/static/jwt.css">
+  <script src="/static/jwt.js" defer></script>
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Fatura Masası ana sayfa"><span class="brand-mark">fm</span><span>Fatura Masası<small>Güvenlik atölyesi</small></span></a>
+    <div class="top-controls">
+      <div class="mode-picker" role="group" aria-label="Uygulama sürümü">
+        <button type="button" data-mode="vulnerable" aria-pressed="true">Zafiyetli sürüm</button>
+        <button type="button" data-mode="fixed" aria-pressed="false">Düzeltilmiş sürüm</button>
+      </div>
+      <label class="actor-label">Ders hesabı <select id="actor" aria-label="Ders hesabını seç"></select></label>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar" aria-label="Çalışmalar">
+      <div class="sidebar-heading"><span>ÇALIŞMALAR</span><span id="progress-count">0 / 8</span></div>
+      <nav id="labs" aria-label="Lab seçimi"></nav>
+      <div class="sidebar-bottom"><p>Önce normal işlemi dene.<br>Sonra isteği değiştir.</p><button type="button" class="text-button" id="reset">Verileri sıfırla</button></div>
+    </aside>
+    <main>
+      <div class="page-heading"><div><p class="eyebrow" id="lab-number">ÇALIŞMA 01</p><h1 id="lab-title">Fatura arama</h1><p id="lab-description" class="muted"></p></div><span class="mode-label" id="mode-label">Zafiyetli sürüm</span></div>
+      <div id="global-error" class="notice error" role="alert" hidden></div>
+      <div class="work-grid">
+        <section class="business-panel" aria-label="Uygulama ekranı"><div class="panel-heading"><h2 id="screen-title">Faturalarım</h2><span id="company-label"></span></div><div id="workspace" aria-live="polite"></div></section>
+        <aside class="task-panel" aria-label="Çalışma görevi">
+          <p class="eyebrow">GÖREV</p><h2 id="task-title"></h2><p id="task-goal"></p>
+          <div class="rule"><span>Beklenen iş kuralı</span><p id="task-rule"></p></div>
+          <button type="button" class="text-button" id="hint-toggle" aria-expanded="false">Küçük bir ipucu</button><p id="hint" class="hint" hidden></p>
+          <div id="evidence" class="evidence" aria-live="polite"></div>
+        </aside>
+      </div>
+      <details class="source-panel" id="code-panel" open>
+        <summary><span>İlgili kod</span><span id="code-version">Zafiyetli sürüm · Python</span></summary>
+        <div class="source-intro"><p id="code-question"></p><button type="button" class="text-button" id="copy-code">Kodu kopyala</button></div>
+        <p class="source-context" id="code-context"></p>
+        <div id="code-blocks" aria-live="polite"></div>
+      </details>
+      <section class="console" aria-label="HTTP istek çalışma alanı">
+        <div class="console-heading"><div><h2>İstek masası</h2><p>Normal işlem isteği burada görünür. Değiştirip yeniden gönderebilirsin.</p></div><button type="button" id="request-default" class="text-button">Örnek isteği getir</button></div>
+        <div class="console-grid">
+          <form id="request-form" class="request-panel">
+            <div class="request-line"><label class="sr-only" for="method">HTTP yöntemi</label><select id="method"><option>GET</option><option>POST</option><option>PATCH</option></select><label class="sr-only" for="path">İstek yolu</label><input id="path" spellcheck="false" autocomplete="off" aria-describedby="path-help"></div>
+            <div id="auth-field" hidden><label for="authorization">Authorization başlığı</label><textarea id="authorization" rows="3" maxlength="8192" spellcheck="false" placeholder="Bearer eyJ..."></textarea></div>
+            <label for="body">JSON gövdesi</label><textarea id="body" spellcheck="false" rows="7" aria-describedby="path-help"></textarea>
+            <div class="request-actions"><small id="path-help">Tutarlar API’de tam sayı kuruş olarak taşınır.</small><button class="primary" id="send-request" type="submit">İsteği gönder <span aria-hidden="true">↗</span></button></div>
+          </form>
+          <div class="response-panel"><div class="response-heading"><h3>Sunucu yanıtı</h3><span id="response-status">Henüz istek yok</span></div><pre id="response" tabindex="0">Bir işlem yap veya örnek isteği gönder.</pre></div>
+        </div>
+      </section>
+      <footer class="page-footer"><span>Her tarayıcı oturumunun verileri ayrıdır.</span><span>Sekiz küçük çalışma, aynı uygulama.</span></footer>
+    </main>
+  </div>
+  <dialog id="reset-dialog"><h2>Baştan başlayalım mı?</h2><p>İki sürümdeki denemeler ve çalışma ilerlemesi sıfırlanacak.</p><form method="dialog" class="dialog-actions"><button value="cancel">Vazgeç</button><button value="reset" class="primary">Verileri sıfırla</button></form></dialog>
+  <div id="toast" role="status" hidden></div>
+</body>
+</html>

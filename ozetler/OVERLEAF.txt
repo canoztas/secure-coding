@@ -1,0 +1,5 @@
+Overleaf: New Project > Upload Project ile ZIP paketini yükleyin.
+Compiler: XeLaTeX
+Main document: main.tex
+Harici font veya görsel gerektirmez.
+Kaynak belge: hafta01-07-cheat-sheet.tex
