@@ -22,15 +22,11 @@
 .source-intro { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 15px 20px 5px; }
 .source-intro p { font-size: 12px; }
 .source-intro button { flex-shrink: 0; }
-.source-context { color: var(--muted); font: 10px/1.6 var(--mono); margin: 0 20px 14px; }
-.source-file { color: #5f715c; font: 10px var(--mono); letter-spacing: .4px; padding: 11px 20px; background: #ecf0e6; border-top: 1px solid var(--line); }
 .source-block pre { margin: 0; padding: 14px 0; max-height: 345px; overflow: auto; background: #14241e; color: #e2e8db; font: 12px/1.85 var(--mono); tab-size: 4; }
 .source-block code { display: block; font: inherit; }
 .source-line { display: flex; min-width: max-content; padding-right: 24px; }
 .source-number { display: inline-block; flex-shrink: 0; min-width: 55px; padding: 0 14px 0 16px; text-align: right; color: #94ad98; user-select: none; }
 .source-text { display: inline-block; white-space: pre; padding-left: 12px; }
-.source-focus { background: #283b2b; box-shadow: inset 3px 0 #d6ac62; }
-.source-focus .source-number { color: #e8cf92; }
 .py-keyword { color: #f2a9c5; }
 .py-string { color: #e4d19a; }
 .py-number { color: #c7b9f5; }
@@ -41,8 +37,6 @@
   .source-intro { padding: 14px 15px 6px; gap: 12px; align-items: flex-start; }
   .source-intro p { font-size: 11px; }
   .source-intro button { font-size: 11px; }
-  .source-context { margin: 0 15px 12px; font-size: 9px; }
-  .source-file { padding: 10px 15px; }
   .source-block pre { font-size: 11px; max-height: 285px; }
   .source-number { min-width: 44px; padding: 0 9px; }
   .source-text { padding-left: 9px; }

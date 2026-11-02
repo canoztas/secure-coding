@@ -119,26 +119,38 @@ class LabTests(unittest.TestCase):
         self.assertEqual(self.client.get("/api/bootstrap", headers={"Host": "elsewhere.test"}).status_code, 400)
         self.assertEqual(self.client.post("/api/vulnerable/orders", json=[]).status_code, 400)
 
-    def test_code_views_match_actual_source_and_do_not_change_progress(self):
-        import textwrap
-        lines = Path(__file__).with_name("app.py").read_text(encoding="utf8").splitlines()
+    def test_code_views_show_only_vulnerable_branch_without_changing_progress(self):
+        import ast
         for lab in ("search", "object", "fields", "notes", "price", "coupon", "workflow", "jwt"):
+            versions = []
             for mode in ("vulnerable", "fixed"):
                 response = self.get(f"/api/{mode}/code/{lab}")
                 self.assertEqual(response.status_code, 200)
                 view = response.json
                 self.assertEqual((view["lab"], view["mode"]), (lab, mode))
+                self.assertEqual(view["variant"], "vulnerable")
                 self.assertTrue(view["question"])
+                versions.append([block["code"] for block in view["blocks"]])
                 for block in view["blocks"]:
-                    expected = textwrap.dedent("\n".join(lines[block["start_line"]-1:block["end_line"]]))
-                    self.assertEqual(block["code"], expected)
+                    parsed = ast.parse(block["code"])
+                    for node in ast.walk(parsed):
+                        if isinstance(node, (ast.If, ast.IfExp)):
+                            self.assertFalse(any(isinstance(part, ast.Name) and part.id == "mode" for part in ast.walk(node.test)))
+                        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+                            self.assertNotEqual(node.func.id, "prove")
                     self.assertNotIn("SECRET_KEY", block["code"])
+            self.assertEqual(versions[0], versions[1])
         self.assertEqual(self.get("/api/fixed/code/unknown").status_code, 404)
         self.assertEqual(self.get("/api/unknown/code/search").status_code, 404)
         self.assertEqual(self.progress(), {})
         fixed = self.get("/api/fixed/code/search").json["blocks"][0]
         vulnerable = self.get("/api/vulnerable/code/search").json["blocks"][0]
-        self.assertNotEqual(fixed["focus_lines"], vulnerable["focus_lines"])
+        self.assertEqual(fixed["code"], vulnerable["code"])
+        jwt_code = self.get("/api/fixed/code/jwt").json["blocks"][0]["code"]
+        self.assertIn("'verify_signature': False", jwt_code)
+        self.assertNotIn("algorithms", jwt_code)
+        object_code = self.get("/api/fixed/code/object").json["blocks"][0]["code"]
+        self.assertNotIn("can_read", object_code)
 
     def test_jwt_payload_and_role_tampering(self):
         import base64

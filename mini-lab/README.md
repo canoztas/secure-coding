@@ -16,10 +16,10 @@ Bu uygulama ders amacıyla kasıtlı zafiyetler içerir; yalnız `127.0.0.1` üz
 ## Çalışma biçimi
 
 1. Bir çalışma seçin; önce uygulama ekranından normal işlemi yapın.
-2. **İlgili kod** bölümünde çalışan sunucu kodunu satır numaralarıyla inceleyin. Kod doğrudan `app.py` dosyasından alınır; vurgular seçili sürüme ait koşul dallarını gösterir. Panel açılıp kapatılabilir, kod kopyalanabilir.
+2. **Zafiyetli kod** bölümünde ilgili kod parçasını inceleyin. Kod, `app.py` içindeki zafiyetli daldan türetilir; sürüm seçme koşulları ve ilerleme kayıtları örnekten çıkarılır. Panel açılıp kapatılabilir, kod kopyalanabilir.
 3. İstek masasında HTTP yöntemini, yolu veya JSON gövdesini değiştirin. Tarayıcının ağ paneli veya bir HTTP istemcisi de kullanılabilir.
 4. Sunucunun yanıtını ve uygulamadaki değişikliği inceleyin. Yalnız geçerli bir etki gözlendiğinde çalışma işaretlenir; not labında JavaScript'in tarayıcıda çalışması beklenir.
-5. **Düzeltilmiş sürüm** seçilince düzenlediğiniz istek korunur; sürüm yolu ve kod vurguları değişir. Aynı isteği tekrar gönderin ve normal işlevin de çalıştığını doğrulayın.
+5. **Düzeltilmiş sürüm** seçilince düzenlediğiniz istek korunur; sürüm yolu değişir. Kod paneli zafiyetli örneği göstermeye devam eder. Aynı isteği tekrar gönderin ve normal işlevin de çalıştığını doğrulayın.
 6. Hatanın kök nedenini, kullanılma koşulunu, teknik etkisini ve iş etkisini iki üç cümleyle açıklayın.
 
 | Çalışma | Denenecek durum | Beklenen iş kuralı |

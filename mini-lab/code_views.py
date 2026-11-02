@@ -1,4 +1,4 @@
-"""Lab ekranları için yalnız izin verilen işlevlerden gerçek kaynak satırları."""
+"""Lab ekranları için çalışan kodun yalnız zafiyetli dalını gösterir."""
 import ast
 from functools import lru_cache
 from pathlib import Path
@@ -12,8 +12,8 @@ VIEWS = {
     "notes": ("note_preview", "note = selected(", "rendered =", "Kaydedilen not HTML çıktısına nasıl ekleniyor?"),
     "price": ("order", "unit =", "record =", "Birim fiyat istekten mi, sunucudaki katalogdan mı geliyor?"),
     "coupon": ("coupon", "uid =", 'coupon["used_by"].append(', "Kullanım kontrolü ile tutar değişikliği hangi sırayla yapılıyor?"),
-    "workflow": ("confirm", 'if mode == "fixed"', 'order["status"] =', "Sipariş onaylanmadan önce hangi koşullar aranıyor?"),
-    "jwt": ("jwt_invoices", "try:", 'raise LabError("Token doğrulanamadı:', "Token yalnız okunuyor mu, yoksa imzası da doğrulanıyor mu?"),
+    "workflow": ("confirm", "order = own_delivery(", 'order["status"] =', "Sipariş onaylanmadan önce hangi koşullar aranıyor?"),
+    "jwt": ("jwt_invoices", 'claims = jwt.decode(token, options=', 'claims = jwt.decode(token, options=', "Token yalnız okunuyor mu, yoksa imzası da doğrulanıyor mu?"),
 }
 
 
@@ -23,7 +23,69 @@ def source_tree():
     return source.splitlines(), ast.parse(source)
 
 
-def excerpt(function, start=None, end=None, mode=None):
+class VulnerableBranch(ast.NodeTransformer):
+    """Sürüm seçimini çözer; lab ilerleme kaydını örnekten çıkarır."""
+
+    def visit_Compare(self, node):
+        node = self.generic_visit(node)
+        if len(node.ops) != 1 or not isinstance(node.comparators[0], ast.Constant):
+            return node
+        left = node.left
+        value = None
+        if isinstance(left, ast.Name) and left.id == "mode":
+            value = "vulnerable"
+        elif (isinstance(left, ast.Attribute) and isinstance(left.value, ast.Name)
+              and left.value.id == "request" and left.attr == "method"):
+            value = "GET"
+        if value is None:
+            return node
+        if isinstance(node.ops[0], ast.Eq):
+            return ast.copy_location(ast.Constant(value == node.comparators[0].value), node)
+        if isinstance(node.ops[0], ast.NotEq):
+            return ast.copy_location(ast.Constant(value != node.comparators[0].value), node)
+        return node
+
+    def visit_BoolOp(self, node):
+        node = self.generic_visit(node)
+        is_and = isinstance(node.op, ast.And)
+        values = []
+        for value in node.values:
+            if isinstance(value, ast.Constant) and isinstance(value.value, bool):
+                if value.value != is_and:
+                    return ast.copy_location(ast.Constant(not is_and), node)
+            else:
+                values.append(value)
+        if not values:
+            return ast.copy_location(ast.Constant(is_and), node)
+        if len(values) == 1:
+            return values[0]
+        node.values = values
+        return node
+
+    def visit_If(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.test, ast.Constant) and isinstance(node.test.value, bool):
+            return node.body if node.test.value else node.orelse
+        if not node.body:
+            if not node.orelse:
+                return None
+            node.test = ast.UnaryOp(op=ast.Not(), operand=node.test)
+            node.body, node.orelse = node.orelse, []
+        return node
+
+    def visit_IfExp(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.test, ast.Constant) and isinstance(node.test.value, bool):
+            return node.body if node.test.value else node.orelse
+        return node
+
+    def visit_Expr(self, node):
+        if isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name) and node.value.func.id == "prove":
+            return None
+        return self.generic_visit(node)
+
+
+def excerpt(function, start=None, end=None):
     lines, tree = source_tree()
     node = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == function)
     first, last = node.lineno, node.end_lineno
@@ -31,26 +93,15 @@ def excerpt(function, start=None, end=None, mode=None):
         first = next(i + 1 for i in range(first - 1, last) if lines[i].lstrip().startswith(start))
     if end:
         last = next(i + 1 for i in range(first - 1, last) if lines[i].lstrip().startswith(end))
-    focus = set()
-    for item in ast.walk(node):
-        if not isinstance(item, ast.If):
-            continue
-        guards = [n for n in ast.walk(item.test) if isinstance(n, ast.Compare) and isinstance(n.left, ast.Name) and n.left.id == "mode"]
-        for guard in guards:
-            if len(guard.ops) != 1 or not isinstance(guard.ops[0], ast.Eq) or not isinstance(guard.comparators[0], ast.Constant):
-                continue
-            branch = item.body if guard.comparators[0].value == mode else item.orelse
-            for statement in branch:
-                focus.update(range(statement.lineno, statement.end_lineno + 1))
-    code = textwrap.dedent("\n".join(lines[first - 1:last]))
-    return {"file": "app.py", "start_line": first, "end_line": last, "code": code, "focus_lines": sorted(n for n in focus if first <= n <= last)}
+    source = textwrap.dedent("\n".join(lines[first - 1:last]))
+    projected = VulnerableBranch().visit(ast.parse(source))
+    code = ast.unparse(ast.fix_missing_locations(projected))
+    return {"file": "app.py", "code": code}
 
 
 def code_view(lab, mode):
     if lab not in VIEWS or mode not in ("vulnerable", "fixed"):
         raise ValueError("Unknown code view")
     function, start, end, question = VIEWS[lab]
-    blocks = [excerpt(function, start, end, mode)]
-    if lab == "object":
-        blocks.append(excerpt("can_read", mode=mode))
-    return {"lab": lab, "mode": mode, "question": question, "blocks": blocks}
+    blocks = [excerpt(function, start, end)]
+    return {"lab": lab, "mode": mode, "variant": "vulnerable", "question": question, "blocks": blocks}

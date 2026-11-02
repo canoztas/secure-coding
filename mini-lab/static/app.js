@@ -66,13 +66,11 @@ async function loadCode() {
   }
   if(key!==`${state.lab.id}:${state.mode}`)return;
   const view=codeCache.get(key);currentCode=view;
-  $('#code-version').textContent=`${mode==='fixed'?'Düzeltilmiş sürüm':'Zafiyetli sürüm'} · Python`;
+  $('#code-version').textContent='Python';
   $('#code-question').textContent=view.question;
-  $('#code-context').textContent=`mode = "${mode}" · Vurgular, bu sürüme ait koşul dallarını gösterir.`;
   $('#code-blocks').innerHTML=view.blocks.map(block=>{
-    const focus=new Set(block.focus_lines);
-    const rows=block.code.split('\n').map((line,i)=>`<span class="source-line${focus.has(block.start_line+i)?' source-focus':''}"><span class="source-number" aria-hidden="true">${block.start_line+i}</span><span class="source-text">${highlightPython(line)||' '}</span></span>`).join('');
-    return `<div class="source-block"><div class="source-file">${esc(block.file)} · ${block.start_line}–${block.end_line}</div><pre tabindex="0" aria-label="${esc(block.file)} kaynak kodu"><code>${rows}</code></pre></div>`;
+    const rows=block.code.split('\n').map((line,i)=>`<span class="source-line"><span class="source-number" aria-hidden="true">${i+1}</span><span class="source-text">${highlightPython(line)||' '}</span></span>`).join('');
+    return `<div class="source-block"><pre tabindex="0" aria-label="Zafiyetli Python kodu"><code>${rows}</code></pre></div>`;
   }).join('');
 }
 function renderNav() {
