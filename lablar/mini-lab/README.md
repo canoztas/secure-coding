@@ -3,7 +3,7 @@
 Fatura ve ofis siparişi akışları üzerinde sekiz kısa güvenlik çalışması. Python 3.10+, Flask ve PyJWT kullanır; Docker, Node veya harici veritabanı gerekmez.
 
 ```powershell
-cd mini-lab
+cd lablar/mini-lab
 python -m venv .venv
 .venv\Scripts\python -m pip install -r requirements.txt
 .venv\Scripts\python app.py
@@ -60,9 +60,9 @@ Aracın ürettiği değiştirilmiş token’ı uygulamadaki **Token** alanına y
 [Write-up (PDF)](writeup.pdf), sekiz labın adım adım çözümünü, beklenen HTTP yanıtlarını, kök nedenlerini, teknik/iş etkilerini ve düzeltme sonrası kontrolleri içerir.
 
 ```powershell
-python -m unittest discover -s mini-lab -p test_app.py -v
+python -m unittest discover -s lablar/mini-lab -p test_app.py -v
 ```
 
-Bu test komutu repo kökünden çalıştırılır. `mini-lab` içindeyken `python -m unittest -v` kullanılabilir. Testler geçici bir veritabanında zafiyetli sonucu, aynı girdinin düzeltilmiş davranışını, normal işlemleri, sıfırlamayı ve çalışma alanlarının ayrılığını denetler.
+Bu test komutu repo kökünden çalıştırılır. `lablar/mini-lab` içindeyken `python -m unittest -v` kullanılabilir. Testler geçici bir veritabanında zafiyetli sonucu, aynı girdinin düzeltilmiş davranışını, normal işlemleri, sıfırlamayı ve çalışma alanlarının ayrılığını denetler.
 
 Uygulama verileri `instance/lab.sqlite3` dosyasındadır; repoya eklenmez. Ana sayfa ve statik dosyalar çevrimdışı kullanılabilir; sunucunun çalışması gerekir.

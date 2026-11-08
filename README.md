@@ -3,7 +3,7 @@
 **Secure Coding and Programming** · Seçmeli Lisans Dersi · 2026–27 Güz Dönemi
 Eğitmen: **Refik Can Öztaş** (Offensive Security, Turknet)
 
-Bu repo ders sunumlarını, uygulama örneklerini ve dönem projesi yönergesini içerir.
+Bu repo ders sunumlarını, lablarını, haftalık özeti ve dönem projesi yönergesini içerir.
 
 **[Ders için anonim geri bildirim formunu aç →](https://forms.gle/UorMFxBT6SKM1qve9)**
 
@@ -19,21 +19,24 @@ Bu repo ders sunumlarını, uygulama örneklerini ve dönem projesi yönergesini
 | 6 | Yetkilendirme: IDOR/BOLA/BFLA/BOPLA, şirket ve alan erişimleri, RBAC/ABAC/ReBAC kodları, UUID örneği, gerçek vakalar ve etkileşimli erişim denemesi | [HTML](slaytlar/hafta06.html) · [PDF](slaytlar/hafta06.pdf) |
 | 7 | JWT’de simetrik/asimetrik doğrulama ve istemcide saklama; OAuth ve SSO; log toplama, ayrıştırma, grafik ve anomali tespitine giriş; dosya yükleme güvenliği; zafiyet türü–etki ayrımı, bağımsız RCE kapanışı ve Log4Shell örneği | [HTML](slaytlar/hafta07.html) · [PDF](slaytlar/hafta07.pdf) |
 
+HTML sürümleri çevrimdışı açılır; ok tuşlarıyla ilerlenir, **F** ile tam ekran açılır.
+
 ## Lablar
 
-[Lablar, kurulum ve kullanım yönergeleri](lablar/README.md)
+| Hafta | Lab | Konu |
+|:---:|---|---|
+| 2 | [Web labı](lablar/hafta02/README.md) | SQL injection, command injection, path traversal; argument injection, SSTI, XXE ve NoSQL ek örnekleri |
+| 4 | [Kripto labı](lablar/hafta04/README.md) | Dört rakamlı PIN'e brute force ve hata sayfasından key sızıntısı |
+| 5 | [Parola labı](lablar/hafta05/README.md) | User enumeration, password spraying, sızan yedekte sözlük saldırısı, k-anonymity ile sızıntı kontrolü; parola kırma simülatörü |
+| 1–7 | [Mini lab: Fatura Masası](lablar/mini-lab/README.md) | SQL enjeksiyonu, kayıt ve alan izinleri, kalıcı XSS, istemci fiyatı, kupon tekrarı, ödeme adımını atlama, JWT payload değiştirme · [Write-up (PDF)](lablar/mini-lab/writeup.pdf) |
 
-## İlk 7 hafta: cheat sheet
+Kurulum ve çalıştırma adımları: [lablar/README.md](lablar/README.md). Lablar Python ile yerelde çalışır ve kasıtlı zafiyetler içerir; yalnız kendi bilgisayarınızda kullanın.
 
-Her haftaya bir sayfa ayıran **7 sayfalık cheat sheet**; kavramların Türkçe ve İngilizce karşılıklarını, kısaltmaların açılımlarını ve kısa kod örneklerini toplar. SQLi/LFI, STRIDE ve HTTP çizimlerine ek olarak 6. sayfada tek fatura vakası; 7. sayfada JWT, kurumsal giriş, log işleme ve RCE akışları bulunur. Dosya yükleme, bir görsel eki örneğiyle; RCE, uygulama yetkileri ve Log4Shell örneğiyle açıklanır. Çizimler PDF’de yerel vektörler olarak yer alır.
+## Özet: ilk 7 hafta cheat sheet
 
-[PDF](ozetler/hafta01-07-cheat-sheet.pdf)
+Her haftaya bir sayfa ayıran 7 sayfalık özet: kavramların Türkçe ve İngilizce karşılıkları, kısaltmalar, kısa kod örnekleri ve akış çizimleri.
 
-7. hafta sunumunun kaynağı [araclar/hafta07_uret.py](araclar/hafta07_uret.py) dosyasındadır; sunum `python araclar/hafta07_uret.py` ile üretilir.
-
-## Mini lab uygulaması
-
-[Fatura Masası](mini-lab/README.md), fatura ve sipariş akışlarında sekiz kısa çalışma içerir: SQL enjeksiyonu, kayıt ve alan izinleri, kalıcı XSS, istemci fiyatı, kupon tekrarı, ödeme adımını atlama ve JWT payload değiştirme. Her çalışma zafiyetli ve düzeltilmiş sürümde denenebilir; çalışan kod görünümü, istek masası, etki takibi ve sıfırlama bulunur. JWT doğrudan web ekranında düzenlenebilir; jwt_tool çıktısı da yapıştırılabilir. Python/Flask ile yerelde çalışır. [Write-up (PDF)](mini-lab/writeup.pdf).
+[Cheat sheet (PDF)](ozetler/hafta01-07-cheat-sheet.pdf)
 
 ## Dönem projesi
 

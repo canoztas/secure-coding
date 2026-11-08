@@ -1,2 +1,0 @@
-beautifulsoup4>=4.12,<5
-Pygments>=2.17,<3

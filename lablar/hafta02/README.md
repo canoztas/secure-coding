@@ -11,14 +11,14 @@ python -X utf8 lablar/hafta02/app.py
 
 Open **http://127.0.0.1:5023**. Use `--port 5024` to change the port. Stop the server with `Ctrl+C` in the terminal. Command and argument examples require Git on PATH; Windows uses the POSIX tools bundled with Git for Windows. No internet connection or separate database service is needed to run the app.
 
-## Classroom walkthrough
+## Walkthrough
 
-1. Select a scenario. Explain its purpose and initial data.
+1. Select a scenario and read its purpose and initial data.
 2. Select **Normal input**, then **Run** to send the request.
 3. Connect `input` in the HTTP body to the Python function's `value` argument. Follow the highlighted line to its interpreter.
-4. Select **Exploit input** to change only the input. Ask students to predict the result before running it.
+4. Select **Exploit input** to change only the input. Predict the result before running it.
 5. Select **Compare both versions** to send the same input to the Vulnerable and Fixed versions. Compare HTTP status, output, and file side effects.
-6. Compare the normal input too, showing that the fix preserves expected behavior.
+6. Compare the normal input too, and check that the fix preserves expected behavior.
 
 Preset buttons fill the field without sending a request. Results come from the actual server response. The code panel reads the running function with `inspect.getsourcelines()`. The full-source link also shows setup and helper functions.
 
@@ -42,8 +42,6 @@ The intentional vulnerabilities are for local teaching. The server binds to `127
 
 The endpoint is `POST /api/run/<scenario>/<vulnerable|safe>`. The JSON body's `input` string is passed to the selected Python function. The actual result is returned in `output`, intermediate values in `trace`, and file side effects in `artifacts`. A 400 or 403 result also sets the real HTTP status. NoSQL/XML documents travel as strings inside this outer JSON envelope; the second parsing step is visible in the code. The UI label **Fixed** maps to the `safe` route.
 
-The original `/profile`, `/download`, and `/hello` app used in the slides is preserved in `scripts/hafta02_demo.py`. This is a separate interactive app using the same scenario inputs and fictional records. Its lesson-note text is localized as `Lesson note: validate untrusted input.` The original slide screenshot evidence describes the original app, not this one.
-
 | File | Purpose |
 |---|---|
 | `app.py` | HTTP, temporary workspace, source-code access |
@@ -52,14 +50,3 @@ The original `/profile`, `/download`, and `/hello` app used in the slides is pre
 | `structured_scenarios.py` | XML parser and NoSQL model |
 | `catalog.py` | Explanations, expected behavior, preset inputs |
 | `static/` | Browser UI, including the black theme |
-| `verify.py` | Actual HTTP and browser verification |
-| `evidence/` | Verification record and app screenshots |
-
-Verification also requires Playwright and Microsoft Edge:
-
-```powershell
-python -m pip install playwright
-python -X utf8 lablar/hafta02/verify.py
-```
-
-Verification starts and stops its own temporary server without affecting the classroom server. It writes `evidence/checks.json`. It does not commit, push, or publish anything.
